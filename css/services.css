@@ -98,5 +98,10 @@
   padding-left: 0;
 }
 
+/* Make only the footer brand paragraph white */
+footer.site-footer .footer-brand p {
+  color: #ffffff;
+}
+
 
 
