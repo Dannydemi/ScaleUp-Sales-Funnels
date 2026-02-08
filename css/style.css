@@ -3359,7 +3359,5 @@ section.hero {
   text-decoration: none;
 }
 
-/* Make only the footer brand paragraph white */
-.footer-brand p {
-  color: #ffffff;
-}
+
+
