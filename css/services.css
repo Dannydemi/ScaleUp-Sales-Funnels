@@ -1,0 +1,99 @@
+/* ================= SERVICE PAGE GLOBAL ================= */
+.service-page {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Typography */
+.service-page h1,
+.service-page h2,
+.service-page h3 {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.service-page p {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.service-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.service-page ul li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.service-page ul li::before {
+  content: "✔";
+  color: #6a3df0;
+  position: absolute;
+  left: 0;
+}
+
+/* ================= HERO ================= */
+.service-page .service-hero {
+  background: linear-gradient(135deg, #6a3df0 0%, #4a90e2 100%);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.service-page .service-hero img {
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.service-page .service-hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.service-page .service-hero .subtitle {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #f0f0f0;
+}
+
+/* ================= DETAILS ================= */
+.service-page .service-details {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+/* ================= CTA ================= */
+.service-page .service-cta {
+  text-align: center;
+  margin: 40px 0;
+}
+
+/* ================= FOOTER ================= */
+.service-page footer.site-footer {
+  background: #222;
+  color: #ccc;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .service-page .service-hero h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* REMOVE CHECK ICONS FROM HEADER NAV */
+.service-page header.site-header ul li::before {
+  content: none !important;
+}
+
+.service-page header.site-header ul li {
+  padding-left: 0;
+}

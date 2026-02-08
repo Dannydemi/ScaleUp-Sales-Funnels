@@ -1,0 +1,377 @@
+/* ================= BLOG POST STYLES ================= */
+
+/* Container & Layout */
+.blog-main {
+  display: flex;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  gap: 2rem;
+}
+
+.blog-content-container {
+  display: flex;
+  width: 100%;
+}
+
+.blog-content {
+  flex: 3;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.blog-sidebar {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+/* Back to Blog Button */
+.back-to-blog .btn-back {
+  display: inline-block;
+  margin: 1rem 2rem;
+  padding: 0.5rem 1rem;
+  background-color: #0073e6;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Featured Image */
+.featured-image img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 0 auto 2rem;
+  display: block;
+}
+
+/* Blog Content Typography */
+.blog-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.blog-content h2 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 0.5rem;
+  color: #0073e6;
+}
+
+.blog-content p {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.lead-magnet-list {
+  list-style: decimal inside;
+  margin-left: 1rem;
+}
+
+.lead-magnet-list li {
+  margin-bottom: 1.5rem;
+}
+
+.affiliate-link {
+  color: #e67e22;
+  text-decoration: underline;
+}
+
+/* Blog Meta */
+.blog-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Sidebar Sections */
+.blog-sidebar h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.blog-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.blog-sidebar ul li {
+  margin-bottom: 0.5rem;
+}
+
+.blog-sidebar a {
+  text-decoration: none;
+  color: #0073e6;
+  transition: color 0.2s ease;
+}
+
+.blog-sidebar a:hover {
+  color: #e67e22;
+}
+
+/* Comments Section */
+.comments-section {
+  margin-top: 3rem;
+}
+
+.comments-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.comments-section form input,
+.comments-section form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.comments-section .btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #0073e6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.comment {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f1f1f1;
+  border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .blog-main {
+    flex-direction: column;
+  }
+  .blog-sidebar {
+    margin-top: 2rem;
+  }
+}
+
+/* ================= Affiliate Links Styling ================= */
+.affiliate-link {
+  color: #0066cc;           /* Primary brand/link color */
+  text-decoration: underline;
+  font-weight: 500;         /* Slight emphasis */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.affiliate-link:hover {
+  color: #004999;           /* Darker shade on hover */
+  text-decoration: none;    /* Removes underline on hover for cleaner look */
+}
+
+/* Style for lead magnet titles to mimic h2 spacing and appearance */
+.lead-title {
+  display: block;           /* behaves like a heading */
+  font-size: 1.8rem;        /* similar to h2 */
+  font-weight: 700;         /* bold like h2 */
+  margin: 1.5rem 0 0.5rem; /* top/bottom spacing */
+  color: #222222;           /* heading color */
+}
+
+/* ================= Lead Magnet List ================= */
+.lead-magnet-list {
+  counter-reset: lead-counter; /* optional if custom numbering is needed */
+  list-style: decimal inside;  /* numbers inside the list, aligned with content */
+  padding-left: 0;             /* remove default ol padding */
+  margin: 2rem 0;              /* spacing before and after list */
+}
+
+.lead-magnet-list li {
+  margin-bottom: 2rem;         /* spacing between list items */
+  position: relative;
+  padding-left: 1.5rem;        /* space for the number */
+}
+
+.lead-magnet-list li .lead-title {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #222222;
+}
+
+/* Footer Images Override */
+.site-footer img {
+  width: auto;       /* reset any blog-wide img rules */
+  height: auto;      /* keep natural aspect ratio */
+  max-width: 100%;   /* prevent overflow */
+  display: inline-block;
+}
+
+.site-footer .footer-socials img {
+  width: 28px;       /* fixed size for icons */
+  height: 28px;
+  margin-right: 10px;
+}
+
+/* ================= FOOTER LOGO & SOCIALS FIX ================= */
+.site-footer .footer-brand img {
+  width: 150px;       /* match other pages' footer logo size */
+  height: auto;       /* maintain aspect ratio */
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.site-footer .footer-socials {
+  display: flex;        /* ensure icons align horizontally */
+  align-items: center;  /* vertically center within container */
+  gap: 12px;            /* consistent spacing between icons */
+  margin-top: 0.5rem;   /* adjust top spacing if needed */
+}
+
+.site-footer .footer-socials img {
+  width: 24px;          /* standard icon size used on main site */
+  height: 24px;         /* maintain square */
+  display: block;
+}
+
+/* ================= BLOG POST FOOTER SOCIAL ICON FIX ================= */
+
+/* Ensure footer social container aligns items correctly */
+.site-footer .footer-socials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px; /* space between icons */
+  margin-top: 0.5rem;
+  padding: 0;
+}
+
+/* Circular icon wrapper */
+.site-footer .footer-socials a {
+  width: 36px;          /* fixed square for each icon */
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;   /* circular shape */
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+/* Icon images inside circular wrapper */
+.site-footer .footer-socials a img {
+  width: 20px;           /* uniform icon size */
+  height: 20px;
+  object-fit: contain;    /* maintain aspect ratio */
+  display: block;
+  margin: 0 auto;
+}
+
+/* ================= BLOG POST FOOTER SOCIAL ICON FIX ================= */
+.site-footer .footer-socials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px; /* space between icons */
+  margin-top: 0.5rem;
+  padding: 0;
+}
+
+.site-footer .footer-socials a {
+  width: 48px;          /* circular container size */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;   /* circular shape */
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+.site-footer .footer-socials a img {
+  width: 28px;          /* icon size inside the circle */
+  height: 28px;
+  object-fit: contain;   /* maintain aspect ratio */
+  display: block;
+  margin: 0 auto;
+}
+
+/* ================= FOOTER SOCIAL ICONS FIX ================= */
+.site-footer .footer-socials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px; /* spacing between icons */
+}
+
+.site-footer .footer-socials a {
+  width: 40px;             /* size of the circular container */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;      /* circle shape */
+  overflow: hidden;
+  background-color: #000;  /* same as main site (adjust if needed) */
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer .footer-socials a img {
+  width: 24px;             /* uniform icon size */
+  height: 24px;
+  object-fit: contain;      /* maintain aspect ratio */
+  display: block;
+  margin: 0 auto;
+}
+
+/* ================= FOOTER SOCIAL ICONS — FIT TO CIRCLE, 32px SIZE ================= */
+.site-footer .footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* spacing between icons */
+  margin-top: 0.5rem;
+}
+
+/* Each social link as a perfect circle */
+.site-footer .footer-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;            /* smaller circle size */
+  height: 30px;
+  border-radius: 50%;      /* circular shape */
+  overflow: hidden;
+  padding: 0;
+  background-color: #000;  /* default, override per icon */
+}
+
+/* Icon images fill the entire circle */
+.site-footer .footer-socials a img {
+  width: 100%;             /* fill circle width */
+  height: 100%;            /* fill circle height */
+  object-fit: cover;       /* maintain aspect ratio and fill circle */
+  display: block;
+}
+
+/* Optional: Icon-specific background colors */
+.site-footer .footer-socials a:nth-child(1) { background-color: #1877F2; } /* Facebook */
+.site-footer .footer-socials a:nth-child(2) { background-color: #FF0000; } /* YouTube */
+.site-footer .footer-socials a:nth-child(3) { background-color: #00B140; } /* Upwork */
+.site-footer .footer-socials a:nth-child(4) { background-color: #000000; } /* TikTok */
