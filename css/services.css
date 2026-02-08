@@ -103,5 +103,10 @@ footer.site-footer .footer-brand p {
   color: #ffffff;
 }
 
+/* Make only the footer brand paragraph white */
+footer.site-footer .footer-brand p {
+  color: #ffffff !important;
+}
+
 
 
