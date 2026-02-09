@@ -50,7 +50,9 @@
   <div class="contact-wrapper">
 
     <!-- LEFT: FORM -->
-    <form class="contact-form" id="quoteForm">
+    <form class="contact-form" id="quoteForm"
+          action="https://formspree.io/f/xzdazypb"
+          method="POST">
       <div class="form-group">
         <label>Name <span>*</span></label>
         <input type="text" placeholder="First" name="firstName" required />
@@ -186,10 +188,8 @@
 <script src="../js/main.js"></script>
 
 <script>
-  document.getElementById("quoteForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+  document.getElementById("quoteForm").addEventListener("submit", function () {
     alert("Thank you! Your request has been received. We’ll review your details and send you a custom quote shortly.");
-    this.reset();
   });
 
   document.getElementById("current-year").textContent = new Date().getFullYear();
