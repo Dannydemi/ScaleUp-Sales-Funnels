@@ -88,6 +88,34 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function animateResultCounter(el) {
+    // FIX: If the result heading contains a .count span (new structure),
+    // animate ONLY that span using data-target and do NOT overwrite the whole h3.
+    const countEl = el.querySelector(".count");
+
+    if (countEl) {
+      const target = +countEl.getAttribute("data-target") || 0;
+      let current = 0;
+
+      const duration = 1500;
+      const increment = Math.max(1, Math.floor(target / (duration / 16)));
+
+      const update = () => {
+        current += increment;
+
+        if (current >= target) {
+          countEl.textContent = target;
+          return;
+        }
+
+        countEl.textContent = current;
+        requestAnimationFrame(update);
+      };
+
+      update();
+      return; // IMPORTANT: prevent fallback from overwriting the h3 text
+    }
+
+    // Fallback: original behavior for any result h3 without a .count span
     const targetText = el.innerText.trim();
     const isPercent = targetText.includes("%");
     const isMultiplier = targetText.includes("X");
