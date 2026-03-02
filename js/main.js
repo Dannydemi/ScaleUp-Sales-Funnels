@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ✅ Paste your LIVE Apps Script /exec URL here
   // Example: https://script.google.com/macros/s/XXXXXXX/exec
-  const SCRIPT_URL = "PASTE_YOUR_LIVE_EXEC_URL_HERE";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPNhp1hEga32ycn__lJYe9mdXEZt0tQ2Sw1S4qwHJplMN3mzWLWW9womLkV-b_y5h/exec";
 
   // Ensure visible form never navigates away
   form.removeAttribute("action");
@@ -299,3 +299,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 800);
   }, true);
 });
+
