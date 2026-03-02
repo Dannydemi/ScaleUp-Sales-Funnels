@@ -205,3 +205,97 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// ================= QUOTE FORM (ScaleUp Sales Funnels) =================
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("quoteForm");
+  if (!form) return;
+
+  const statusEl = document.getElementById("quoteStatus");
+  const thankYou = document.getElementById("thankYouMessage");
+
+  // ✅ Paste your LIVE Apps Script /exec URL here
+  // Example: https://script.google.com/macros/s/XXXXXXX/exec
+  const SCRIPT_URL = "PASTE_YOUR_LIVE_EXEC_URL_HERE";
+
+  // Ensure visible form never navigates away
+  form.removeAttribute("action");
+  form.removeAttribute("method");
+  form.removeAttribute("target");
+
+  // Hidden iframe (already in HTML; fallback-create if missing)
+  let iframe = document.getElementById("quote_hidden_iframe");
+  if (!iframe) {
+    iframe = document.createElement("iframe");
+    iframe.id = "quote_hidden_iframe";
+    iframe.name = "quote_hidden_iframe";
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+  }
+
+  // Hidden form that actually posts to Apps Script (no CORS issues)
+  let hiddenForm = document.getElementById("quote_hidden_form");
+  if (!hiddenForm) {
+    hiddenForm = document.createElement("form");
+    hiddenForm.id = "quote_hidden_form";
+    hiddenForm.style.display = "none";
+    document.body.appendChild(hiddenForm);
+  }
+
+  hiddenForm.method = "POST";
+  hiddenForm.action = SCRIPT_URL;
+  hiddenForm.target = "quote_hidden_iframe";
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Honeypot spam check
+    const hp = document.getElementById("websiteField");
+    if (hp && hp.value) return;
+
+    if (statusEl) statusEl.textContent = "Submitting…";
+
+    // Disable the submit button if present
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+
+    // Clear previous hidden inputs
+    hiddenForm.innerHTML = "";
+
+    // Collect visible form data
+    const fd = new FormData(form);
+
+    // Add helpful fields for your sheet/workflow
+    const firstName = String(fd.get("firstName") || "").trim();
+    const lastName = String(fd.get("lastName") || "").trim();
+    const fullName = (firstName + " " + lastName).trim();
+
+    // Standardize name for Apps Script (optional but useful)
+    fd.append("name", fullName);
+
+    // Add metadata
+    fd.append("source", window.location.href);
+    fd.append("workflow_stage", "Lead received - needs qualification");
+
+    // Copy form data into hidden inputs
+    for (const [key, value] of fd.entries()) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value;
+      hiddenForm.appendChild(input);
+    }
+
+    // Submit silently
+    hiddenForm.submit();
+
+    // UI success (we assume ok if submitted—Apps Script logs the truth)
+    setTimeout(() => {
+      if (statusEl) statusEl.textContent = "";
+      form.style.display = "none";
+      if (thankYou) thankYou.style.display = "block";
+      if (btn) btn.disabled = false;
+    }, 800);
+  }, true);
+});
