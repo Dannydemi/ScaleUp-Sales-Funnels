@@ -214,8 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const statusEl = document.getElementById("quoteStatus");
   const thankYou = document.getElementById("thankYouMessage");
 
-  // ✅ Paste your LIVE Apps Script /exec URL here
-  // Example: https://script.google.com/macros/s/XXXXXXX/exec
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXPNhp1hEga32ycn__lJYe9mdXEZt0tQ2Sw1S4qwHJplMN3mzWLWW9womLkV-b_y5h/exec";
 
   // Ensure visible form never navigates away
@@ -223,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
   form.removeAttribute("method");
   form.removeAttribute("target");
 
-  // Hidden iframe (already in HTML; fallback-create if missing)
+  // Hidden iframe (created if missing)
   let iframe = document.getElementById("quote_hidden_iframe");
   if (!iframe) {
     iframe = document.createElement("iframe");
@@ -233,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(iframe);
   }
 
-  // Hidden form that actually posts to Apps Script (no CORS issues)
+  // Hidden form that actually posts to Apps Script
   let hiddenForm = document.getElementById("quote_hidden_form");
   if (!hiddenForm) {
     hiddenForm = document.createElement("form");
@@ -246,17 +244,28 @@ document.addEventListener("DOMContentLoaded", function () {
   hiddenForm.action = SCRIPT_URL;
   hiddenForm.target = "quote_hidden_iframe";
 
+  let submitted = false;
+
+  // When iframe loads AFTER submit, treat as success
+  iframe.addEventListener("load", () => {
+    if (!submitted) return;
+
+    if (statusEl) statusEl.textContent = "";
+    form.style.display = "none";
+    if (thankYou) thankYou.style.display = "block";
+
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = false;
+
+    submitted = false;
+  });
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    // Honeypot spam check
-    const hp = document.getElementById("websiteField");
-    if (hp && hp.value) return;
-
     if (statusEl) statusEl.textContent = "Submitting…";
 
-    // Disable the submit button if present
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
 
@@ -266,17 +275,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Collect visible form data
     const fd = new FormData(form);
 
-    // Add helpful fields for your sheet/workflow
-    const firstName = String(fd.get("firstName") || "").trim();
-    const lastName = String(fd.get("lastName") || "").trim();
-    const fullName = (firstName + " " + lastName).trim();
-
-    // Standardize name for Apps Script (optional but useful)
-    fd.append("name", fullName);
-
     // Add metadata
     fd.append("source", window.location.href);
     fd.append("workflow_stage", "Lead received - needs qualification");
+    fd.append("status", "New");
 
     // Copy form data into hidden inputs
     for (const [key, value] of fd.entries()) {
@@ -287,17 +289,18 @@ document.addEventListener("DOMContentLoaded", function () {
       hiddenForm.appendChild(input);
     }
 
-    // Submit silently
+    submitted = true;
+
+    // Submit silently (no CORS issues)
     hiddenForm.submit();
 
-    // UI success (we assume ok if submitted—Apps Script logs the truth)
+    // Fallback: if iframe never loads, re-enable button after 6s
     setTimeout(() => {
-      if (statusEl) statusEl.textContent = "";
-      form.style.display = "none";
-      if (thankYou) thankYou.style.display = "block";
+      if (!submitted) return;
+      submitted = false;
+      if (statusEl) statusEl.textContent = "Submitted. If you don’t see the thank-you message, please try again.";
       if (btn) btn.disabled = false;
-    }, 800);
+    }, 6000);
   }, true);
 });
-
 
