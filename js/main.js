@@ -1,3 +1,12 @@
+// ================= HUBSPOT GLOBAL TRACKING =================
+(function () {
+  const hsScript = document.createElement("script");
+  hsScript.src = "https://js-eu1.hs-scripts.com/147768764.js";
+  hsScript.async = true;
+  hsScript.defer = true;
+  document.head.appendChild(hsScript);
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
   // ===================== MENU TOGGLE =====================
   const toggle = document.getElementById("menuToggle");
@@ -303,4 +312,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 6000);
   }, true);
 });
+
 
