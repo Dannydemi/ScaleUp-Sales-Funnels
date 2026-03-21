@@ -3457,31 +3457,3 @@ section.hero {
 .cta-section h2 {
   margin-bottom: 10px;
 }
-
-/* ================= THREE COLUMN SECTION ================= */
-
-.three-columns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  margin-top: 40px;
-}
-
-.three-columns .column h2 {
-  margin-bottom: 15px;
-}
-
-.three-columns .column {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-}
-
-/* MOBILE RESPONSIVE */
-@media (max-width: 900px) {
-  .three-columns {
-    grid-template-columns: 1fr;
-  }
-}
-
