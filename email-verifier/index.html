@@ -193,13 +193,18 @@ async function unlockResults() {
 
     const data = await res.json();
 
-    // 🔥 BLOCK NON-SAFE EMAILS
-   if (!data.valid || data.status === "DANGEROUS") {
-      alert("Please enter a real, valid email address");
-      btn.innerText = "Unlock Results";
-      btn.disabled = false;
-      return;
-    }
+// 🔥 BLOCK NON-SAFE EMAILS
+if (!data.valid || data.status === "DANGEROUS") {
+  alert("Please enter a real, valid email address");
+  btn.innerText = "Unlock Results";
+  btn.disabled = false;
+  return;
+}
+
+// 🔥 OPTIONAL UX UPGRADE (ADD HERE)
+if (data.roleBased) {
+  console.log("Business email detected");
+}
 
     // 🔥 SEND TO GOOGLE SHEETS
     await fetch(LEAD_URL, {
