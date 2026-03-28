@@ -114,11 +114,11 @@
 
   <button onclick="downloadCSV()">Download Results</button>
   <button onclick="downloadSafeCSV()">Download SAFE Emails Only</button>
-  
+
   <div class="result" id="result">Result will appear here...</div>
 </div>
 
-<!-- 🔥 LEAD CAPTURE MODAL -->
+<!-- MODAL -->
 <div id="leadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
   <div style="background:#1e293b; padding:20px; border-radius:10px; width:300px;">
     <h3>Enter your email to view results</h3>
@@ -138,7 +138,7 @@ let pendingResult = [];
 let originalRows = [];
 let headers = [];
 
-// ================= SINGLE =================
+// SINGLE
 async function verifyEmail() {
   const email = document.getElementById("email").value;
   const resultBox = document.getElementById("result");
@@ -150,7 +150,86 @@ async function verifyEmail() {
 
   resultBox.innerHTML = '<div class="loader">⏳ Verifying email...</div>';
 
-  try {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+
+  pendingResult = [data];
+  document.getElementById("leadModal").style.display = "flex";
+}
+
+// UNLOCK
+async function unlockResults() {
+  const userEmail = document.getElementById("userEmail").value;
+  const btn = document.getElementById("unlockBtn");
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(userEmail)) {
+    alert("Enter valid email");
+    return;
+  }
+
+  btn.innerText = "Checking...";
+  btn.disabled = true;
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email: userEmail })
+  });
+
+  const data = await res.json();
+
+  if (!data.valid || data.status === "DANGEROUS") {
+    alert("Use a real email");
+    btn.innerText = "Unlock Results";
+    btn.disabled = false;
+    return;
+  }
+
+  await fetch(LEAD_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      userEmail,
+      type: pendingResult.length > 1 ? "bulk" : "single",
+      checkedEmail: pendingResult.map(r => r.email).join(", ")
+    })
+  });
+
+  document.getElementById("leadModal").style.display = "none";
+  displayTable(pendingResult);
+
+  btn.innerText = "Unlock Results";
+  btn.disabled = false;
+}
+
+// BULK
+async function verifyBulk() {
+  const file = document.getElementById("file").files[0];
+  if (!file) return alert("Select file");
+
+  const data = await file.arrayBuffer();
+  const workbook = XLSX.read(data);
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const json = XLSX.utils.sheet_to_json(sheet);
+
+  originalRows = json;
+  headers = Object.keys(json[0] || {});
+
+  let results = [];
+
+  for (let i = 0; i < json.length; i++) {
+    let email =
+      json[i].Email ||
+      json[i].email ||
+      Object.values(json[i]).find(v => typeof v === "string" && v.includes("@"));
+
+    if (!email) continue;
+
     const res = await fetch(API_URL, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -159,200 +238,54 @@ async function verifyEmail() {
 
     const data = await res.json();
 
-    pendingResult = [data];
-
-    document.getElementById("leadModal").style.display = "flex";
-
-  } catch (error) {
-    resultBox.innerText = "❌ Failed to connect to backend";
+    results.push({ ...data, index: i });
+    await new Promise(r => setTimeout(r, 200));
   }
+
+  pendingResult = results;
+  document.getElementById("leadModal").style.display = "flex";
 }
 
-// ================= UNLOCK =================
-async function unlockResults() {
-  const userEmail = document.getElementById("userEmail").value;
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(userEmail)) {
-    alert("Please enter a valid email address");
-    return;
-  }
-
-  const btn = document.getElementById("unlockBtn");
-  btn.innerText = "Checking...";
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ email: userEmail })
-    });
-
-    const data = await res.json();
-
-    if (!data.valid || data.status === "DANGEROUS") {
-      alert("Please enter a real, valid email address");
-      btn.innerText = "Unlock Results";
-      btn.disabled = false;
-      return;
-    }
-
-    if (data.roleBased) {
-      console.log("Business email detected");
-    }
-
-    await fetch(LEAD_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        userEmail: userEmail,
-        type: "single",
-        checkedEmail: pendingResult[0]?.email || ""
-      })
-    });
-
-    document.getElementById("leadModal").style.display = "none";
-    displayTable(pendingResult);
-
-  } catch (err) {
-    alert("Something went wrong. Try again.");
-  }
-
-  btn.innerText = "Unlock Results";
-  btn.disabled = false;
-}
-
-// ================= BULK =================
-async function verifyBulk() {
-  const file = document.getElementById("file").files[0];
-  const resultBox = document.getElementById("result");
-
-  if (!file) {
-    resultBox.innerText = "❌ Please select a file";
-    return;
-  }
-
-  resultBox.innerHTML = '<div class="loader">⏳ Processing bulk emails...</div>';
-
-  try {
-    let emails = [];
-
-    if (file.name.endsWith(".xlsx")) {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data);
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(sheet);
-
-      originalRows = json;
-      headers = Object.keys(json[0] || {});
-
-      emails = json.map((row, index) => {
-        let value =
-          row.Email ||
-          row.email ||
-          Object.values(row).find(v =>
-            typeof v === "string" && v.includes("@")
-          );
-
-        return { email: value, index: index };
-      }).filter(e => e.email);
-    }
-
-    let results = [];
-
-    for (let item of emails) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email: item.email })
-      });
-
-      const data = await res.json();
-
-      results.push({
-        ...data,
-        index: item.index
-      });
-
-      await new Promise(r => setTimeout(r, 200));
-    }
-
-    pendingResult = results;
-    document.getElementById("leadModal").style.display = "flex";
-
-  } catch (error) {
-    resultBox.innerText = "❌ Failed to process file";
-  }
-}
-
-// ================= TABLE =================
+// TABLE
 function displayTable(results) {
   lastResults = results;
 
-  const resultBox = document.getElementById("result");
-
-  let table = `
-    <table>
-      <tr>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Score</th>
-      </tr>
-  `;
+  let html = `<table><tr><th>Email</th><th>Status</th><th>Score</th></tr>`;
 
   results.forEach(r => {
-    let badgeClass = "";
+    let cls = r.status === "SAFE" ? "safe" :
+              r.status === "RISKY" ? "risky" : "danger";
 
-    if (r.status === "SAFE") badgeClass = "badge safe";
-    if (r.status === "RISKY") badgeClass = "badge risky";
-    if (r.status === "DANGEROUS") badgeClass = "badge danger";
-
-    table += `
-      <tr>
-        <td>${r.email}</td>
-        <td><span class="${badgeClass}">${r.status}</span></td>
-        <td>${r.score}</td>
-      </tr>
-    `;
+    html += `<tr>
+      <td>${r.email}</td>
+      <td><span class="badge ${cls}">${r.status}</span></td>
+      <td>${r.score}</td>
+    </tr>`;
   });
 
-  table += "</table>";
-
-  resultBox.innerHTML = table;
+  html += "</table>";
+  document.getElementById("result").innerHTML = html;
 }
 
-// ================= DOWNLOAD =================
+// DOWNLOAD ALL
 function downloadCSV() {
-  if (!lastResults.length) return;
-
   let csv = "Email,Status,Score\n";
+  lastResults.forEach(r => csv += `${r.email},${r.status},${r.score}\n`);
 
-  lastResults.forEach(r => {
-    csv += `${r.email},${r.status},${r.score}\n`;
-  });
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-
+  const blob = new Blob([csv]);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = "verified_emails.csv";
+  a.href = URL.createObjectURL(blob);
+  a.download = "results.csv";
   a.click();
 }
 
-// ================= SAFE DOWNLOAD =================
+// DOWNLOAD SAFE FULL ROWS
 function downloadSafeCSV() {
-  if (!lastResults.length) return;
-
   const safeRows = lastResults
     .filter(r => r.status === "SAFE")
     .map(r => originalRows[r.index]);
 
-  if (!safeRows.length) {
-    alert("No SAFE emails to download");
-    return;
-  }
+  if (!safeRows.length) return alert("No SAFE emails");
 
   let csv = headers.join(",") + "\n";
 
@@ -360,11 +293,9 @@ function downloadSafeCSV() {
     csv += headers.map(h => `"${row[h] || ""}"`).join(",") + "\n";
   });
 
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-
+  const blob = new Blob([csv]);
   const a = document.createElement("a");
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = "safe_cleaned_data.csv";
   a.click();
 }
