@@ -113,7 +113,8 @@
   <button onclick="verifyBulk()">Upload & Verify Bulk</button>
 
   <button onclick="downloadCSV()">Download Results</button>
-
+  <button onclick="downloadSafeCSV()">Download SAFE Emails Only</button>
+  
   <div class="result" id="result">Result will appear here...</div>
 </div>
 
@@ -348,6 +349,51 @@ function downloadCSV() {
   const a = document.createElement("a");
   a.href = url;
   a.download = "verified_emails.csv";
+  a.click();
+}
+
+  // ================= DOWNLOAD =================
+function downloadCSV() {
+  if (!lastResults.length) return;
+
+  let csv = "Email,Status,Score\n";
+
+  lastResults.forEach(r => {
+    csv += `${r.email},${r.status},${r.score}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "verified_emails.csv";
+  a.click();
+}
+
+// 🔥 ADD THIS NEW FUNCTION BELOW
+function downloadSafeCSV() {
+  if (!lastResults.length) return;
+
+  const safeEmails = lastResults.filter(r => r.status === "SAFE");
+
+  if (!safeEmails.length) {
+    alert("No SAFE emails to download");
+    return;
+  }
+
+  let csv = "Email\n";
+
+  safeEmails.forEach(r => {
+    csv += `${r.email}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "safe_emails.csv";
   a.click();
 }
 </script>
