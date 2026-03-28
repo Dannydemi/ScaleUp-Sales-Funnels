@@ -135,6 +135,8 @@ const LEAD_URL = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpT
 
 let lastResults = [];
 let pendingResult = [];
+let originalRows = [];
+let headers = [];
 
 // ================= SINGLE =================
 async function verifyEmail() {
@@ -177,37 +179,30 @@ async function unlockResults() {
     return;
   }
 
-  // 🔥 LOADING STATE
   const btn = document.getElementById("unlockBtn");
   btn.innerText = "Checking...";
   btn.disabled = true;
 
   try {
-    // 🔥 VERIFY EMAIL USING YOUR BACKEND
     const res = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ email: userEmail })
     });
 
     const data = await res.json();
 
-// 🔥 BLOCK NON-SAFE EMAILS
-if (!data.valid || data.status === "DANGEROUS") {
-  alert("Please enter a real, valid email address");
-  btn.innerText = "Unlock Results";
-  btn.disabled = false;
-  return;
-}
+    if (!data.valid || data.status === "DANGEROUS") {
+      alert("Please enter a real, valid email address");
+      btn.innerText = "Unlock Results";
+      btn.disabled = false;
+      return;
+    }
 
-// 🔥 OPTIONAL UX UPGRADE (ADD HERE)
-if (data.roleBased) {
-  console.log("Business email detected");
-}
+    if (data.roleBased) {
+      console.log("Business email detected");
+    }
 
-    // 🔥 SEND TO GOOGLE SHEETS
     await fetch(LEAD_URL, {
       method: "POST",
       body: JSON.stringify({
@@ -217,7 +212,6 @@ if (data.roleBased) {
       })
     });
 
-    // 🔥 UNLOCK RESULTS
     document.getElementById("leadModal").style.display = "none";
     displayTable(pendingResult);
 
@@ -228,6 +222,7 @@ if (data.roleBased) {
   btn.innerText = "Unlock Results";
   btn.disabled = false;
 }
+
 // ================= BULK =================
 async function verifyBulk() {
   const file = document.getElementById("file").files[0];
@@ -249,7 +244,10 @@ async function verifyBulk() {
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const json = XLSX.utils.sheet_to_json(sheet);
 
-      emails = json.flatMap(row => {
+      originalRows = json;
+      headers = Object.keys(json[0] || {});
+
+      emails = json.map((row, index) => {
         let value =
           row.Email ||
           row.email ||
@@ -257,40 +255,31 @@ async function verifyBulk() {
             typeof v === "string" && v.includes("@")
           );
 
-        if (!value) return [];
-
-        return value
-          .split(",")
-          .map(e => e.replace("%20", "").trim())
-          .filter(e => e.includes("@"));
-      });
-    } else {
-      const text = await file.text();
-
-      emails = text
-        .split("\n")
-        .flatMap(line =>
-          line.split(",").map(e => e.replace("%20", "").trim())
-        )
-        .filter(e => e.includes("@"));
+        return { email: value, index: index };
+      }).filter(e => e.email);
     }
 
     let results = [];
 
-    for (let email of emails) {
+    for (let item of emails) {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email: item.email })
       });
 
       const data = await res.json();
-      results.push(data);
+
+      results.push({
+        ...data,
+        index: item.index
+      });
 
       await new Promise(r => setTimeout(r, 200));
     }
 
-    displayTable(results);
+    pendingResult = results;
+    document.getElementById("leadModal").style.display = "flex";
 
   } catch (error) {
     resultBox.innerText = "❌ Failed to process file";
@@ -352,40 +341,23 @@ function downloadCSV() {
   a.click();
 }
 
-  // ================= DOWNLOAD =================
-function downloadCSV() {
-  if (!lastResults.length) return;
-
-  let csv = "Email,Status,Score\n";
-
-  lastResults.forEach(r => {
-    csv += `${r.email},${r.status},${r.score}\n`;
-  });
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "verified_emails.csv";
-  a.click();
-}
-
-// 🔥 ADD THIS NEW FUNCTION BELOW
+// ================= SAFE DOWNLOAD =================
 function downloadSafeCSV() {
   if (!lastResults.length) return;
 
-  const safeEmails = lastResults.filter(r => r.status === "SAFE");
+  const safeRows = lastResults
+    .filter(r => r.status === "SAFE")
+    .map(r => originalRows[r.index]);
 
-  if (!safeEmails.length) {
+  if (!safeRows.length) {
     alert("No SAFE emails to download");
     return;
   }
 
-  let csv = "Email\n";
+  let csv = headers.join(",") + "\n";
 
-  safeEmails.forEach(r => {
-    csv += `${r.email}\n`;
+  safeRows.forEach(row => {
+    csv += headers.map(h => `"${row[h] || ""}"`).join(",") + "\n";
   });
 
   const blob = new Blob([csv], { type: "text/csv" });
@@ -393,7 +365,7 @@ function downloadSafeCSV() {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "safe_emails.csv";
+  a.download = "safe_cleaned_data.csv";
   a.click();
 }
 </script>
