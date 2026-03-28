@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verifier</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
+
+    .header {
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #3b82f6;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 5px;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 25px;
+      margin: 40px auto;
+      width: 420px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .result {
+      margin-top: 20px;
+      background: #020617;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .safe { background: #065f46; color: #10b981; }
+    .risky { background: #78350f; color: #f59e0b; }
+    .danger { background: #7f1d1d; color: #ef4444; }
+
+    .loader {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  ScaleUp Email Verifier
+  <div class="sub">Clean your leads. Improve deliverability.</div>
+</div>
+
+<div class="box">
+
+  <input type="email" id="email" placeholder="Enter single email..." />
+  <button onclick="verifyEmail()">Verify One</button>
+
+  <hr>
+
+  <input type="file" id="file" />
+  <button onclick="verifyBulk()">Upload & Verify Bulk</button>
+
+  <button onclick="downloadCSV()">Download Results</button>
+
+  <div class="result" id="result">Result will appear here...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+const API_URL = "https://email-verifier-dkrb.onrender.com/verify";
+
+let lastResults = [];
+
+// ================= SINGLE =================
+async function verifyEmail() {
+  const email = document.getElementById("email").value;
+  const resultBox = document.getElementById("result");
+
+  if (!email) {
+    resultBox.innerText = "❌ Please enter an email";
+    return;
+  }
+
+  resultBox.innerHTML = '<div class="loader">⏳ Verifying email...</div>';
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    displayTable([data]);
+
+  } catch (error) {
+    resultBox.innerText = "❌ Failed to connect to backend";
+  }
+}
+
+
+// ================= BULK =================
+async function verifyBulk() {
+  const file = document.getElementById("file").files[0];
+  const resultBox = document.getElementById("result");
+
+  if (!file) {
+    resultBox.innerText = "❌ Please select a file";
+    return;
+  }
+
+  resultBox.innerHTML = '<div class="loader">⏳ Processing bulk emails...</div>';
+
+  try {
+    let emails = [];
+
+    if (file.name.endsWith(".xlsx")) {
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet);
+
+      emails = json.flatMap(row => {
+        let value =
+          row.Email ||
+          row.email ||
+          Object.values(row).find(v =>
+            typeof v === "string" && v.includes("@")
+          );
+
+        if (!value) return [];
+
+        return value
+          .split(",")
+          .map(e => e.replace("%20", "").trim())
+          .filter(e => e.includes("@"));
+      });
+    } else {
+      const text = await file.text();
+
+      emails = text
+        .split("\n")
+        .flatMap(line =>
+          line.split(",").map(e => e.replace("%20", "").trim())
+        )
+        .filter(e => e.includes("@"));
+    }
+
+    if (!emails.length) {
+      resultBox.innerText = "❌ No valid emails found";
+      return;
+    }
+
+    let results = [];
+
+    for (let i = 0; i < emails.length; i++) {
+      const email = emails[i];
+
+      resultBox.innerHTML = `<div class="loader">⏳ Verifying ${i + 1}/${emails.length}</div>`;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json();
+        results.push(data);
+
+      } catch (err) {
+        results.push({
+          email,
+          status: "ERROR",
+          score: 0
+        });
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
+
+    displayTable(results);
+
+  } catch (error) {
+    resultBox.innerText = "❌ Failed to process file";
+  }
+}
+
+
+// ================= TABLE =================
+function displayTable(results) {
+  lastResults = results;
+
+  const resultBox = document.getElementById("result");
+
+  let table = `
+    <table>
+      <tr>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Score</th>
+      </tr>
+  `;
+
+  results.forEach(r => {
+    let badgeClass = "";
+
+    if (r.status === "SAFE") badgeClass = "badge safe";
+    if (r.status === "RISKY") badgeClass = "badge risky";
+    if (r.status === "DANGEROUS") badgeClass = "badge danger";
+
+    table += `
+      <tr>
+        <td>${r.email}</td>
+        <td><span class="${badgeClass}">${r.status}</span></td>
+        <td>${r.score}</td>
+      </tr>
+    `;
+  });
+
+  table += "</table>";
+
+  resultBox.innerHTML = table;
+}
+
+
+// ================= DOWNLOAD =================
+function downloadCSV() {
+  if (!lastResults.length) return;
+
+  let csv = "Email,Status,Score\n";
+
+  lastResults.forEach(r => {
+    csv += `${r.email},${r.status},${r.score}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "verified_emails.csv";
+  a.click();
+}
+</script>
+
+</body>
+</html>
