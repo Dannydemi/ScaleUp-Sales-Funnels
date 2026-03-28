@@ -4,108 +4,155 @@
   <title>Free Funnel Audit & Strategy Call | ScaleUp</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #020617;
-      color: white;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 60px 20px;
       text-align: center;
     }
 
-    .section {
-      padding: 40px 20px;
-      max-width: 700px;
+    h1 {
+      font-size: 34px;
+      color: #f8fafc;
+      margin-bottom: 15px;
+    }
+
+    .subtext {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 600px;
       margin: auto;
     }
 
-    h1 {
-      color: #3b82f6;
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #94a3b8;
-      font-size: 15px;
-    }
-
     .highlight {
-      color: #10b981;
-      font-weight: bold;
+      color: #3b82f6;
+      font-weight: 600;
     }
 
-    .box {
+    .card {
       background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    .box li {
-      margin: 10px 0;
-    }
-
-    .calendly {
+      border-radius: 12px;
+      padding: 25px;
       margin-top: 30px;
-      height: 800px;
+      text-align: left;
+      border: 1px solid #334155;
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      color: #f1f5f9;
+    }
+
+    .card ul {
+      padding-left: 18px;
+    }
+
+    .card li {
+      margin-bottom: 10px;
+      color: #cbd5f5;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(59,130,246,0.1);
+      color: #3b82f6;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .urgency {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #f87171;
+    }
+
+    .calendly-wrapper {
+      margin-top: 40px;
+      background: #020617;
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid #1e293b;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<div class="section">
-  <h1>Book Your Free Funnel Audit & Strategy Call</h1>
+<div class="container">
 
-  <p>
-    Discover how to generate <span class="highlight">more qualified leads and booked calls</span> 
-    without relying on referrals or inconsistent marketing.
+  <div class="badge">Free Strategy Session</div>
+
+  <h1>Fix Your Funnel & Start Booking More Qualified Calls</h1>
+
+  <p class="subtext">
+    Discover how to generate <span class="highlight">consistent, high-quality leads</span> 
+    and turn them into booked calls — without relying on referrals or guesswork.
   </p>
-</div>
 
-<!-- WHAT YOU GET -->
-<div class="section">
-  <div class="box">
-    <h3>On this call, you’ll get:</h3>
+  <!-- VALUE -->
+  <div class="card">
+    <h3>What You’ll Get On This Call:</h3>
     <ul>
-      <li>✔ A breakdown of your current client acquisition system</li>
-      <li>✔ Identify gaps in your funnel and why leads aren’t converting</li>
-      <li>✔ A clear strategy to increase booked calls and conversions</li>
+      <li>✔ Full breakdown of your current client acquisition system</li>
+      <li>✔ Identify gaps killing your conversions</li>
+      <li>✔ Clear roadmap to generate more booked calls</li>
       <li>✔ Actionable next steps you can implement immediately</li>
     </ul>
   </div>
-</div>
 
-<!-- WHO THIS IS FOR -->
-<div class="section">
-  <div class="box">
-    <h3>This is for you if:</h3>
+  <!-- WHO -->
+  <div class="card">
+    <h3>This Is For You If:</h3>
     <ul>
-      <li>✔ You're a coach or consultant selling high-ticket services</li>
-      <li>✔ You struggle to get consistent qualified leads</li>
-      <li>✔ You rely too much on referrals or inconsistent outreach</li>
-      <li>✔ You want a predictable system for client acquisition</li>
+      <li>✔ You're a coach, consultant, or service business</li>
+      <li>✔ You struggle with inconsistent lead flow</li>
+      <li>✔ You're tired of relying on referrals</li>
+      <li>✔ You want a predictable client acquisition system</li>
     </ul>
   </div>
-</div>
 
-<!-- URGENCY -->
-<div class="section">
-  <p>
-    ⚠️ Limited availability — only a few strategy calls are available each week.
+  <p class="urgency">
+    ⚠️ Limited slots available each week
   </p>
-</div>
 
-<!-- CALENDLY -->
-<div class="section">
-  <div class="calendly">
+  <!-- CALENDLY -->
+  <div class="calendly-wrapper">
     <div class="calendly-inline-widget"
       data-url="https://calendly.com/daniel-scaleup/funnel-audit"
-      style="min-width:320px;height:100%;">
+      style="min-width:320px;height:750px;">
     </div>
   </div>
+
+  <p class="footer-note">
+    No pressure. No hard selling. Just clarity and actionable strategy.
+  </p>
+
 </div>
 
 <script src="https://assets.calendly.com/assets/external/widget.js"></script>
