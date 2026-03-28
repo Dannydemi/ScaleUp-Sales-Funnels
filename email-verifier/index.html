@@ -122,7 +122,7 @@
   <div style="background:#1e293b; padding:20px; border-radius:10px; width:300px;">
     <h3>Enter your email to view results</h3>
     <input type="email" id="userEmail" placeholder="Your email" />
-    <button onclick="unlockResults()">Continue</button>
+    <button id="unlockBtn" onclick="unlockResults()">Unlock Results</button>
   </div>
 </div>
 
@@ -166,29 +166,62 @@ async function verifyEmail() {
 }
 
 // ================= UNLOCK =================
-function unlockResults() {
+async function unlockResults() {
   const userEmail = document.getElementById("userEmail").value;
 
-  if (!userEmail) {
-    alert("Enter your email");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(userEmail)) {
+    alert("Please enter a valid email address");
     return;
   }
 
-  // 🔥 SEND TO GOOGLE SHEET
-  fetch(LEAD_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      userEmail: userEmail,
-      type: "single",
-      checkedEmail: pendingResult[0]?.email || ""
-    })
-  });
+  // 🔥 LOADING STATE
+  const btn = document.getElementById("unlockBtn");
+  btn.innerText = "Checking...";
+  btn.disabled = true;
 
-  document.getElementById("leadModal").style.display = "none";
+  try {
+    // 🔥 VERIFY EMAIL USING YOUR BACKEND
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email: userEmail })
+    });
 
-  displayTable(pendingResult);
+    const data = await res.json();
+
+    // 🔥 BLOCK NON-SAFE EMAILS
+    if (!data.valid || data.status !== "SAFE") {
+      alert("Please enter a real, valid email address");
+      btn.innerText = "Unlock Results";
+      btn.disabled = false;
+      return;
+    }
+
+    // 🔥 SEND TO GOOGLE SHEETS
+    await fetch(LEAD_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        userEmail: userEmail,
+        type: "single",
+        checkedEmail: pendingResult[0]?.email || ""
+      })
+    });
+
+    // 🔥 UNLOCK RESULTS
+    document.getElementById("leadModal").style.display = "none";
+    displayTable(pendingResult);
+
+  } catch (err) {
+    alert("Something went wrong. Try again.");
+  }
+
+  btn.innerText = "Unlock Results";
+  btn.disabled = false;
 }
-
 // ================= BULK =================
 async function verifyBulk() {
   const file = document.getElementById("file").files[0];
