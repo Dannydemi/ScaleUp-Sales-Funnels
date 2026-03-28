@@ -114,7 +114,7 @@
 
   <button onclick="downloadCSV()">Download Results</button>
   <button onclick="downloadSafeCSV()">Download SAFE Emails Only</button>
-
+  
   <div class="result" id="result">Result will appear here...</div>
 </div>
 
@@ -138,7 +138,7 @@ let pendingResult = [];
 let originalRows = [];
 let headers = [];
 
-// SINGLE
+// ================= SINGLE =================
 async function verifyEmail() {
   const email = document.getElementById("email").value;
   const resultBox = document.getElementById("result");
@@ -162,7 +162,7 @@ async function verifyEmail() {
   document.getElementById("leadModal").style.display = "flex";
 }
 
-// UNLOCK
+// ================= UNLOCK =================
 async function unlockResults() {
   const userEmail = document.getElementById("userEmail").value;
   const btn = document.getElementById("unlockBtn");
@@ -207,85 +207,134 @@ async function unlockResults() {
   btn.disabled = false;
 }
 
-// BULK
+// ================= BULK =================
 async function verifyBulk() {
   const file = document.getElementById("file").files[0];
-  if (!file) return alert("Select file");
+  const resultBox = document.getElementById("result");
 
-  const data = await file.arrayBuffer();
-  const workbook = XLSX.read(data);
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const json = XLSX.utils.sheet_to_json(sheet);
-
-  originalRows = json;
-  headers = Object.keys(json[0] || {});
-
-  let results = [];
-
-  for (let i = 0; i < json.length; i++) {
-    let email =
-      json[i].Email ||
-      json[i].email ||
-      Object.values(json[i]).find(v => typeof v === "string" && v.includes("@"));
-
-    if (!email) continue;
-
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ email })
-    });
-
-    const data = await res.json();
-
-    results.push({ ...data, index: i });
-    await new Promise(r => setTimeout(r, 200));
+  if (!file) {
+    resultBox.innerText = "❌ Please select a file";
+    return;
   }
 
-  pendingResult = results;
-  document.getElementById("leadModal").style.display = "flex";
+  resultBox.innerHTML = '<div class="loader">⏳ Processing bulk emails...</div>';
+
+  try {
+    let emails = [];
+
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const json = XLSX.utils.sheet_to_json(sheet);
+
+    originalRows = json;
+    headers = Object.keys(json[0] || {});
+
+    emails = json.map(row => {
+      let value =
+        row.Email ||
+        row.email ||
+        Object.values(row).find(v =>
+          typeof v === "string" && v.includes("@")
+        );
+
+      return { email: value, row: row };
+    }).filter(e => e.email);
+
+    let results = [];
+
+    for (let item of emails) {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ email: item.email })
+      });
+
+      const data = await res.json();
+
+      results.push({
+        ...data,
+        row: item.row
+      });
+
+      await new Promise(r => setTimeout(r, 200));
+    }
+
+    pendingResult = results;
+    document.getElementById("leadModal").style.display = "flex";
+
+  } catch (error) {
+    resultBox.innerText = "❌ Failed to process file";
+  }
 }
 
-// TABLE
+// ================= TABLE =================
 function displayTable(results) {
   lastResults = results;
 
-  let html = `<table><tr><th>Email</th><th>Status</th><th>Score</th></tr>`;
+  const resultBox = document.getElementById("result");
+
+  let table = `
+    <table>
+      <tr>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Score</th>
+      </tr>
+  `;
 
   results.forEach(r => {
-    let cls = r.status === "SAFE" ? "safe" :
-              r.status === "RISKY" ? "risky" : "danger";
+    let badgeClass = "";
 
-    html += `<tr>
-      <td>${r.email}</td>
-      <td><span class="badge ${cls}">${r.status}</span></td>
-      <td>${r.score}</td>
-    </tr>`;
+    if (r.status === "SAFE") badgeClass = "badge safe";
+    if (r.status === "RISKY") badgeClass = "badge risky";
+    if (r.status === "DANGEROUS") badgeClass = "badge danger";
+
+    table += `
+      <tr>
+        <td>${r.email}</td>
+        <td><span class="${badgeClass}">${r.status}</span></td>
+        <td>${r.score}</td>
+      </tr>
+    `;
   });
 
-  html += "</table>";
-  document.getElementById("result").innerHTML = html;
+  table += "</table>";
+
+  resultBox.innerHTML = table;
 }
 
-// DOWNLOAD ALL
+// ================= DOWNLOAD =================
 function downloadCSV() {
+  if (!lastResults.length) return;
+
   let csv = "Email,Status,Score\n";
-  lastResults.forEach(r => csv += `${r.email},${r.status},${r.score}\n`);
+
+  lastResults.forEach(r => {
+    csv += `${r.email},${r.status},${r.score}\n`;
+  });
 
   const blob = new Blob([csv]);
+  const url = URL.createObjectURL(blob);
+
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "results.csv";
+  a.href = url;
+  a.download = "verified_emails.csv";
   a.click();
 }
 
-// DOWNLOAD SAFE FULL ROWS
+// ================= SAFE DOWNLOAD =================
 function downloadSafeCSV() {
+  if (!lastResults.length) return;
+
   const safeRows = lastResults
     .filter(r => r.status === "SAFE")
-    .map(r => originalRows[r.index]);
+    .map(r => r.row);
 
-  if (!safeRows.length) return alert("No SAFE emails");
+  if (!safeRows.length) {
+    alert("No SAFE emails to download");
+    return;
+  }
 
   let csv = headers.join(",") + "\n";
 
@@ -294,8 +343,10 @@ function downloadSafeCSV() {
   });
 
   const blob = new Blob([csv]);
+  const url = URL.createObjectURL(blob);
+
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = "safe_cleaned_data.csv";
   a.click();
 }
