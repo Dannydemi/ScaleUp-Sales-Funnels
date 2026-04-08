@@ -3,7 +3,7 @@
 <head>
   <title>Free Funnel Audit & Strategy Call | ScaleUp</title>
 
-  <!-- ✅ MAIN SITE STYLES (THIS FIXES EVERYTHING) -->
+  <!-- MAIN CSS -->
   <link rel="stylesheet" href="css/style.css" />
 
   <style>
@@ -13,22 +13,51 @@
 
     body {
       margin: 0;
-      padding-top: 90px; /* prevents header overlap */
       font-family: 'Inter', 'Segoe UI', sans-serif;
       background: #f8fafc;
       color: #0f172a;
     }
 
+    /* HEADER FIX */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-cta {
+      margin-left: 20px;
+    }
+
+    /* CONTENT FIX */
     .container {
       max-width: 900px;
-      margin: auto;
-      padding: 60px 20px;
+      margin: 40px auto;
+      padding: 40px 20px;
       text-align: center;
     }
 
     h1 {
       font-size: 34px;
-      color: #0f172a;
       margin-bottom: 15px;
     }
 
@@ -56,10 +85,11 @@
     }
 
     .card {
+      max-width: 700px;
+      margin: 30px auto;
       background: #ffffff;
       border-radius: 12px;
       padding: 25px;
-      margin-top: 30px;
       text-align: left;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -67,7 +97,6 @@
 
     .card h3 {
       margin-bottom: 15px;
-      color: #0f172a;
     }
 
     .card ul {
@@ -76,7 +105,6 @@
 
     .card li {
       margin-bottom: 10px;
-      color: #334155;
     }
 
     .urgency {
@@ -99,9 +127,20 @@
       color: #64748b;
     }
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 26px;
+    /* FOOTER ICON FIX */
+    .footer-socials img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .footer-socials a {
+      margin-right: 10px;
+      display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+      .main-nav ul {
+        display: none;
       }
     }
   </style>
@@ -109,7 +148,7 @@
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
 
@@ -137,7 +176,7 @@
   </div>
 </header>
 
-<!-- ================= CONTENT ================= -->
+<!-- CONTENT -->
 <div class="container">
 
   <div class="badge">Free Strategy Session</div>
@@ -172,17 +211,13 @@
   <div class="card">
     <h3>What Clients Are Saying:</h3>
 
-    <p>
-      ⭐⭐⭐⭐⭐ <br>
-      "ScaleUp Sales Funnels helped us go from 5 to 30 qualified leads per week. Their system is simple and actually works!"  
-      <br><strong>— Sarah Chen</strong>
-    </p>
+    <p>⭐⭐⭐⭐⭐<br>
+    "ScaleUp Sales Funnels helped us go from 5 to 30 qualified leads per week."<br>
+    <strong>— Sarah Chen</strong></p>
 
-    <p>
-      ⭐⭐⭐⭐⭐ <br>
-      "We increased our conversion rate by 40% in just the first month."  
-      <br><strong>— Marcus Johnson</strong>
-    </p>
+    <p>⭐⭐⭐⭐⭐<br>
+    "We increased our conversion rate by 40% in the first month."<br>
+    <strong>— Marcus Johnson</strong></p>
   </div>
 
   <p style="margin-top:20px; font-weight:600; color:#2563eb;">
@@ -206,12 +241,12 @@
 
 </div>
 
-<!-- ================= FOOTER ================= -->
+<!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-container">
 
     <div class="footer-brand">
-      <img src="assets/images/logo2.png" alt="ScaleUp Sales Funnels Logo" />
+      <img src="assets/images/logo2.png" alt="Logo" />
       <p>
         High-converting sales funnels built to generate qualified leads
         and predictable revenue—without complexity.
@@ -236,17 +271,24 @@
 
     <div class="footer-column">
       <h4>Contact</h4>
-      <p class="footer-email">
+      <p>
         <a href="mailto:contact@scaleupsalesfunnels.com">
           contact@scaleupsalesfunnels.com
         </a>
       </p>
+
+      <div class="footer-socials">
+        <a href="#"><img src="assets/images/facebook.png"></a>
+        <a href="#"><img src="assets/images/youtube.png"></a>
+        <a href="#"><img src="assets/images/upwork.png"></a>
+        <a href="#"><img src="assets/images/tiktok.png"></a>
+      </div>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    © <span id="current-year"></span> ScaleUp Sales Funnels — All Rights Reserved
+    © <span id="current-year"></span> ScaleUp Sales Funnels
   </div>
 </footer>
 
