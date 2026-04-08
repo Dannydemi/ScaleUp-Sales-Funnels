@@ -3457,3 +3457,11 @@ section.hero {
 .cta-section h2 {
   margin-bottom: 10px;
 }
+
+.highlight {
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
