@@ -3,6 +3,9 @@
 <head>
   <title>Free Funnel Audit & Strategy Call | ScaleUp</title>
 
+  <!-- ✅ MAIN SITE STYLES (THIS FIXES EVERYTHING) -->
+  <link rel="stylesheet" href="css/style.css" />
+
   <style>
     * {
       box-sizing: border-box;
@@ -10,6 +13,7 @@
 
     body {
       margin: 0;
+      padding-top: 90px; /* prevents header overlap */
       font-family: 'Inter', 'Segoe UI', sans-serif;
       background: #f8fafc;
       color: #0f172a;
@@ -133,6 +137,7 @@
   </div>
 </header>
 
+<!-- ================= CONTENT ================= -->
 <div class="container">
 
   <div class="badge">Free Strategy Session</div>
@@ -144,7 +149,6 @@
     and turn them into booked calls — without relying on referrals or guesswork.
   </p>
 
-  <!-- VALUE -->
   <div class="card">
     <h3>What You’ll Get On This Call:</h3>
     <ul>
@@ -155,7 +159,6 @@
     </ul>
   </div>
 
-  <!-- WHO -->
   <div class="card">
     <h3>This Is For You If:</h3>
     <ul>
@@ -166,26 +169,19 @@
     </ul>
   </div>
 
-  <!-- TESTIMONIALS -->
   <div class="card">
     <h3>What Clients Are Saying:</h3>
 
-    <p style="margin-bottom:15px;">
+    <p>
       ⭐⭐⭐⭐⭐ <br>
       "ScaleUp Sales Funnels helped us go from 5 to 30 qualified leads per week. Their system is simple and actually works!"  
-      <br><strong>— Sarah Chen, Health & Wellness Coach</strong>
-    </p>
-
-    <p style="margin-bottom:15px;">
-      ⭐⭐⭐⭐⭐ <br>
-      "We increased our conversion rate by 40% in just the first month. Best investment we've made."  
-      <br><strong>— Marcus Johnson, Business Coach</strong>
+      <br><strong>— Sarah Chen</strong>
     </p>
 
     <p>
       ⭐⭐⭐⭐⭐ <br>
-      "The automation saved us hours every week. We can finally focus on running the business instead of chasing leads."  
-      <br><strong>— Jennifer Wu, Coach & Consultant</strong>
+      "We increased our conversion rate by 40% in just the first month."  
+      <br><strong>— Marcus Johnson</strong>
     </p>
   </div>
 
@@ -197,7 +193,6 @@
     ⚠️ Limited slots available each week
   </p>
 
-  <!-- CALENDLY -->
   <div class="calendly-wrapper">
     <div class="calendly-inline-widget"
       data-url="https://calendly.com/daniel-scaleup/funnel-audit"
@@ -214,6 +209,7 @@
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <div class="footer-container">
+
     <div class="footer-brand">
       <img src="assets/images/logo2.png" alt="ScaleUp Sales Funnels Logo" />
       <p>
@@ -245,31 +241,12 @@
           contact@scaleupsalesfunnels.com
         </a>
       </p>
-
-      <div class="footer-socials">
-        <a href="https://web.facebook.com/profile.php?id=61580400033389" target="_blank">
-          <img src="assets/images/facebook.png" alt="Facebook" />
-        </a>
-
-        <a href="https://www.youtube.com/@ScaleUpSalesFunnels" target="_blank">
-          <img src="assets/images/youtube.png" alt="YouTube" />
-        </a>
-
-        <a href="https://www.upwork.com/freelancers/~01cbcf1cb7c8ae6109" target="_blank">
-          <img src="assets/images/upwork.png" alt="Upwork" />
-        </a>
-
-        <a href="https://www.tiktok.com/@scaleupsalesfunnels" target="_blank">
-          <img src="assets/images/tiktok.png" alt="TikTok" />
-        </a>
-      </div>
     </div>
+
   </div>
 
   <div class="footer-bottom">
-    © <span id="current-year"></span> ScaleUp Sales Funnels — All Rights Reserved |
-    <a href="privacy-policy.html">Privacy Policy</a> |
-    <a href="terms-of-service.html">Terms of Service</a>
+    © <span id="current-year"></span> ScaleUp Sales Funnels — All Rights Reserved
   </div>
 </footer>
 
