@@ -3588,3 +3588,38 @@ html, body {
   }
 
 }
+
+/* ===== REAL PORTFOLIO MOBILE FIX (FINAL) ===== */
+@media (max-width: 768px) {
+
+  .case-study {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 30px;
+  }
+
+  .case-right {
+    width: 100% !important;
+  }
+
+  .case-stats {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px;
+  }
+
+  .stat-box {
+    width: 100% !important;
+  }
+
+  .results-container {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .result-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+}
