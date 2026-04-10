@@ -300,5 +300,15 @@
 <script src="https://assets.calendly.com/assets/external/widget.js"></script>
 <script src="js/main.js"></script>
 
+  <script>
+  const menuToggle = document.getElementById("menuToggle");
+  const mainNav = document.getElementById("mainNav");
+
+  if (menuToggle && mainNav) {
+    menuToggle.addEventListener("click", function () {
+      mainNav.classList.toggle("active");
+    });
+  }
+</script>
 </body>
 </html>
