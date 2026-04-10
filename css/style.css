@@ -3396,21 +3396,28 @@ section.hero {
   margin-bottom: 10px;
 }
 
-/* Pricing Section */
+/* ================= PRICING SECTION (FIXED) ================= */
+
 .pricing {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr;
   gap: 25px;
   margin-top: 30px;
 }
 
 /* Card */
 .plan {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   border: 1px solid #e5e7eb;
   padding: 25px;
   border-radius: 12px;
   background: #fff;
   text-align: center;
+
+  min-height: 420px;
   transition: 0.3s;
 }
 
@@ -3436,18 +3443,33 @@ section.hero {
   color: #2563eb;
 }
 
-/* Plan List */
+/* Plan List (FIXED) */
 .plan ul {
   list-style: none;
   padding: 0;
-  margin-bottom: 20px;
+  margin: 15px 0;
+  flex-grow: 1;
 }
 
 .plan ul li {
   margin: 8px 0;
 }
 
-/* CTA Section */
+/* BUTTON FIX */
+.plan .btn {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* DESKTOP LAYOUT */
+@media (min-width: 768px) {
+  .pricing {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* ================= CTA SECTION (UNCHANGED) ================= */
 .cta-section {
   background: #f9fafb;
   text-align: center;
