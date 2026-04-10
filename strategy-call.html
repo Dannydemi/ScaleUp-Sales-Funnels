@@ -326,7 +326,13 @@
 
   if (menuToggle && mainNav) {
     menuToggle.addEventListener("click", function () {
-      mainNav.classList.toggle("active");
+
+      if (mainNav.style.display === "block") {
+        mainNav.style.display = "none";
+      } else {
+        mainNav.style.display = "block";
+      }
+
     });
   }
 </script>
