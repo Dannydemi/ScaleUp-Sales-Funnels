@@ -2,10 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services — ScaleUp Sales Funnels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Portfolio — ScaleUp Sales Funnels</title>
   <!-- Correct CSS path from /pages/ -->
   <link rel="stylesheet" href="../css/style.css" />
+  
+  <style>
+    /* ADDITIONAL FIXES FOR HORIZONTAL SCROLL ISSUE */
+    html, body {
+      overflow-x: hidden !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      position: relative;
+    }
+    
+    body {
+      overflow-x: hidden !important;
+    }
+    
+    /* Fix container overflow */
+    .case-study-container,
+    .results-container,
+    .footer-container,
+    .hero,
+    .cta-section {
+      overflow-x: hidden !important;
+      max-width: 100% !important;
+    }
+    
+    /* Fix case study layout on mobile */
+    @media (max-width: 768px) {
+      .case-study {
+        flex-direction: column;
+        padding: 20px;
+        margin: 20px 15px;
+        width: auto;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      
+      .case-left, .case-right {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+      }
+      
+      .case-right {
+        margin-top: 30px;
+      }
+      
+      .case-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .stat-box {
+        flex: 1;
+        min-width: 100px;
+      }
+      
+      .results-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 20px;
+      }
+      
+      .result-card {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .hero-content {
+        padding: 0 20px;
+      }
+      
+      h1 {
+        font-size: 28px;
+      }
+      
+      .cta-section {
+        padding: 40px 20px;
+        margin: 0;
+      }
+      
+      .footer-container {
+        flex-direction: column;
+        padding: 30px 20px;
+        gap: 30px;
+      }
+    }
+    
+    /* Ensure all images don't cause overflow */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Fix any potential overflow from containers */
+    .container, .page-content, .policy-section {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body>
 
@@ -19,8 +118,8 @@
     <nav class="main-nav" id="mainNav">
       <ul>
         <li><a href="../index.html">Home</a></li>
-        <li><a href="services.html" class="active">Services</a></li>
-        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -276,6 +375,33 @@
 </footer>
 
 <script src="../js/main.js"></script>
-</body>
+<script>
+  // Set current year in footer
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+  
+  // Counter animation for stats
+  const counters = document.querySelectorAll('.count');
+  const speed = 200;
 
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = parseInt(counter.getAttribute('data-target'));
+      const current = parseInt(counter.innerText);
+      const increment = Math.ceil(target / speed);
+      
+      if (current < target) {
+        counter.innerText = current + increment;
+        setTimeout(updateCount, 20);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    
+    // Only animate if element is visible (simple check)
+    if (counter.getAttribute('data-target')) {
+      updateCount();
+    }
+  });
+</script>
+</body>
 </html>
