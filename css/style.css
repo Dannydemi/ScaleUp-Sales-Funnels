@@ -3623,3 +3623,21 @@ html, body {
   }
 
 }
+
+/* ===== FOOTER SOCIAL ICON CENTER FIX (MOBILE ONLY) ===== */
+@media (max-width: 768px) {
+
+  .footer-column {
+    text-align: center;
+  }
+
+  .footer-email {
+    text-align: center;
+  }
+
+  .footer-socials {
+    justify-content: center;
+    align-items: center;
+  }
+
+}
