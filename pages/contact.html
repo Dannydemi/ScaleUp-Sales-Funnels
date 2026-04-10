@@ -200,5 +200,30 @@
 
 <script src="../js/main.js"></script>
 
+<script>
+  // Read URL parameters
+  const params = new URLSearchParams(window.location.search);
+  const service = params.get("service");
+  const packageType = params.get("package");
+
+  // Select dropdown
+  const serviceDropdown = document.querySelector('select[name="service"]');
+
+  // Auto-select service
+  if (service && serviceDropdown) {
+    for (let option of serviceDropdown.options) {
+      if (option.value.toLowerCase().includes(service.toLowerCase())) {
+        option.selected = true;
+      }
+    }
+  }
+
+  // Fill package field if it exists
+  const packageField = document.getElementById("packageField");
+  if (packageType && packageField) {
+    packageField.value = packageType;
+  }
+</script>
+  
 </body>
 </html>
