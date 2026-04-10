@@ -68,7 +68,6 @@
       margin: auto;
     }
 
-    /* ✅ ONLY FIX — removed obstruction */
     .highlight {
       color: #2563eb;
       font-weight: 600;
@@ -140,10 +139,47 @@
     }
 
     @media (max-width: 768px) {
+
       .main-nav ul {
         display: none;
       }
+
+      body {
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 26px;
+        line-height: 1.3;
+      }
+
+      .subtext {
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      .card h3 {
+        font-size: 18px;
+      }
+
+      .card li {
+        font-size: 16px;
+      }
+
+      .urgency {
+        font-size: 15px;
+      }
+
+      .footer-note {
+        font-size: 14px;
+      }
+
+      .calendly-inline-widget {
+        min-height: 900px;
+      }
+
     }
+
   </style>
 </head>
 
@@ -230,7 +266,7 @@
   <div class="calendly-wrapper">
     <div class="calendly-inline-widget"
       data-url="https://calendly.com/daniel-scaleup/funnel-audit"
-      style="min-width:320px;height:750px;">
+      style="min-width:320px;height:900px;">
     </div>
   </div>
 
