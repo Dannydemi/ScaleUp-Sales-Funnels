@@ -141,28 +141,79 @@
       display: inline-block;
     }
 
-   @media (max-width: 768px) {
+    /* FIX: Added missing mobile menu styles to eliminate the gap */
+    @media (max-width: 768px) {
+      .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        z-index: 9999;
+        padding: 10px 0;
+      }
 
-  .main-nav.active ul {
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    padding: 15px 0;
-    border-top: 1px solid #e2e8f0;
-    z-index: 999;
-  }
+      .main-nav.active {
+        display: block;
+      }
 
-}
+      .main-nav.active ul {
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0;
+        border-top: none;
+        z-index: 999;
+        gap: 0;
+      }
+
+      .main-nav ul li {
+        padding: 12px 20px;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .main-nav ul li a {
+        display: block;
+        width: 100%;
+        color: #0f172a;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .menu-toggle {
+        display: block;
+        background: transparent;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px 12px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
+    }
+
+    /* FIX: Prevent content from going under the sticky header when scrolling */
+    html {
+      scroll-padding-top: 80px;
+    }
 
     /* ✅ ONLY FIX ADDED — DO NOT TOUCH ANYTHING ELSE */
-.calendly-inline-widget iframe {
-  width: 100% !important;
-  min-height: 900px !important;
-}
+    .calendly-inline-widget iframe {
+      width: 100% !important;
+      min-height: 900px !important;
+    }
   </style>
 </head>
 
@@ -207,7 +258,7 @@
   </p>
 
   <div class="card">
-    <h3>What You’ll Get On This Call:</h3>
+    <h3>What You'll Get On This Call:</h3>
     <ul>
       <li>✔ Full breakdown of your current client acquisition system</li>
       <li>✔ Identify gaps killing your conversions</li>
@@ -312,19 +363,17 @@
 <script src="https://assets.calendly.com/assets/external/widget.js"></script>
 <script src="js/main.js"></script>
 
-  <script>
+<script>
   const menuToggle = document.getElementById("menuToggle");
   const mainNav = document.getElementById("mainNav");
 
   if (menuToggle && mainNav) {
     menuToggle.addEventListener("click", function () {
-
       if (mainNav.style.display === "block") {
         mainNav.style.display = "none";
       } else {
         mainNav.style.display = "block";
       }
-
     });
   }
 </script>
