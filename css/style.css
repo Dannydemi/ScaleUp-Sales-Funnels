@@ -3560,3 +3560,8 @@ section.hero {
   }
 
 }
+
+/* ===== FIX PORTFOLIO SWIPE ISSUE ===== */
+html, body {
+  overflow-x: hidden;
+}
