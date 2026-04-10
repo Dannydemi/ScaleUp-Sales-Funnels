@@ -38,13 +38,17 @@
   position: relative; /* ✅ ADD THIS */
 }
 
-    .main-nav ul {
-      display: flex;
-      gap: 25px;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
+    .main-nav {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  z-index: 9999;
+  padding: 10px 0;
+}
 
     .header-cta {
       margin-left: 20px;
