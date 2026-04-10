@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../css/style.css" />
   
   <style>
-    /* ADDITIONAL FIXES FOR HORIZONTAL SCROLL ISSUE */
+    /* ADDITIONAL FIXES FOR HORIZONTAL SCROLL AND CARD DISPLAY */
     html, body {
       overflow-x: hidden !important;
       width: 100% !important;
@@ -30,47 +30,84 @@
       max-width: 100% !important;
     }
     
-    /* Fix case study layout on mobile */
+    /* Fix case study layout on mobile - FULL VISIBILITY */
     @media (max-width: 768px) {
+      .case-study-container {
+        padding: 0 15px;
+        width: 100%;
+        max-width: 100%;
+      }
+      
       .case-study {
         flex-direction: column;
-        padding: 20px;
-        margin: 20px 15px;
-        width: auto;
+        padding: 25px 20px;
+        margin: 20px 0;
+        width: 100%;
         max-width: 100%;
         overflow-x: hidden;
+        box-sizing: border-box;
       }
       
       .case-left, .case-right {
         width: 100%;
         max-width: 100%;
         padding: 0;
+        box-sizing: border-box;
+      }
+      
+      .case-left {
+        margin-bottom: 25px;
       }
       
       .case-right {
-        margin-top: 30px;
+        margin-top: 0;
+        width: 100%;
+      }
+      
+      .case-big {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
       }
       
       .case-stats {
+        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 15px;
+        width: 100%;
+        justify-content: space-between;
       }
       
       .stat-box {
         flex: 1;
-        min-width: 100px;
+        min-width: 120px;
+        text-align: center;
+        padding: 15px 10px;
+      }
+      
+      /* Ensure text wraps properly */
+      .case-desc {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      
+      h2, h3, h4, h5, p {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
       
       .results-container {
         flex-direction: column;
         gap: 20px;
         padding: 0 20px;
+        width: 100%;
       }
       
       .result-card {
         width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
       }
       
       .hero-content {
@@ -79,17 +116,50 @@
       
       h1 {
         font-size: 28px;
+        word-wrap: break-word;
       }
       
       .cta-section {
         padding: 40px 20px;
         margin: 0;
+        width: 100%;
+      }
+      
+      .cta-section h2, .cta-section p {
+        word-wrap: break-word;
       }
       
       .footer-container {
         flex-direction: column;
         padding: 30px 20px;
         gap: 30px;
+        width: 100%;
+      }
+      
+      .footer-column, .footer-brand {
+        width: 100%;
+      }
+    }
+    
+    /* For very small screens (max-width: 480px) */
+    @media (max-width: 480px) {
+      .case-study {
+        padding: 20px 15px;
+      }
+      
+      .stat-box {
+        min-width: 100px;
+        padding: 10px 8px;
+      }
+      
+      .case-big span {
+        font-size: 36px;
+      }
+      
+      .case-btn {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
       }
     }
     
@@ -103,6 +173,11 @@
     .container, .page-content, .policy-section {
       overflow-x: hidden;
       max-width: 100%;
+    }
+    
+    /* Ensure case study text doesn't overflow */
+    .case-left, .case-right {
+      overflow-x: hidden;
     }
   </style>
 </head>
@@ -397,7 +472,7 @@
       }
     };
     
-    // Only animate if element is visible (simple check)
+    // Only animate if element has data-target
     if (counter.getAttribute('data-target')) {
       updateCount();
     }
