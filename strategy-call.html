@@ -29,28 +29,26 @@
     }
 
     .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative; /* ✅ ADD THIS */
-    }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; /* ✅ ADD THIS */
+}
 
-    /* FIX 1: Remove the gap between menu bar and dropdown items */
-    /* Changed from 'position: fixed' to 'position: absolute' so it connects directly below the header */
     .main-nav {
-      position: absolute; /* FIXED: was 'fixed', causing a gap. Now attaches perfectly below header */
-      top: 100%; /* FIXED: attaches directly to the bottom of the header bar */
-      left: 0;
-      width: 100%;
-      background: #ffffff;
-      border-top: 1px solid #e2e8f0;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      z-index: 9999;
-      padding: 10px 0;
-    }
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  z-index: 9999;
+  padding: 10px 0;
+}
 
     .header-cta {
       margin-left: 20px;
@@ -147,78 +145,72 @@
       display: inline-block;
     }
 
-    @media (max-width: 768px) {
+   @media (max-width: 768px) {
 
-      .main-nav {
-        display: none;
-      }
+  .main-nav {
+    display: none;
+  }
 
-      .main-nav.active {
-        display: block;
-      }
+  .main-nav.active {
+    display: block;
+  }
 
-      .main-nav.active ul {
-        display: flex;
-        flex-direction: column;
-        background: #ffffff;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        padding: 15px 0;
-        border-top: 1px solid #e2e8f0;
-        z-index: 999;
-      }
+  .main-nav.active ul {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    padding: 15px 0;
+    border-top: 1px solid #e2e8f0;
+    z-index: 999;
+  }
 
-    }
+}
 
     /* ✅ ONLY FIX ADDED — DO NOT TOUCH ANYTHING ELSE */
-    .calendly-inline-widget iframe {
-      width: 100% !important;
-      min-height: 900px !important;
-    }
+.calendly-inline-widget iframe {
+  width: 100% !important;
+  min-height: 900px !important;
+}
     /* ===== CLEAN MOBILE MENU DESIGN ===== */
-    @media (max-width: 768px) {
+@media (max-width: 768px) {
 
-      .main-nav {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        border-top: 1px solid #e2e8f0;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        z-index: 9999;
-        padding: 10px 0;
-      }
+  .main-nav {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    z-index: 9999;
+    padding: 10px 0;
+  }
 
-      .main-nav ul {
-        flex-direction: column;
-        gap: 0;
-      }
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0;
+  }
 
-      .main-nav ul li {
-        padding: 12px 20px;
-        border-bottom: 1px solid #f1f5f9;
-      }
+  .main-nav ul li {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+  }
 
-      .main-nav ul li a {
-        display: block;
-        width: 100%;
-        color: #0f172a;
-        font-weight: 500;
-      }
+  .main-nav ul li a {
+    display: block;
+    width: 100%;
+    color: #0f172a;
+    font-weight: 500;
+  }
 
-    }
-
-    /* FIX 2: Prevent page content from going under the sticky header/menu when scrolling */
-    /* This adds a scroll margin to the entire HTML so anchored links and scroll position stop before the header */
-    html {
-      scroll-padding-top: 80px; /* FIXED: compensates for the sticky header height */
-      scroll-behavior: smooth; /* Keeps scrolling smooth, does not change functionality */
-    }
+}
   </style>
 </head>
+
 <body>
 
 <header class="site-header">
@@ -260,7 +252,7 @@
   </p>
 
   <div class="card">
-    <h3>What You'll Get On This Call:</h3>
+    <h3>What You’ll Get On This Call:</h3>
     <ul>
       <li>✔ Full breakdown of your current client acquisition system</li>
       <li>✔ Identify gaps killing your conversions</li>
@@ -365,7 +357,7 @@
 <script src="https://assets.calendly.com/assets/external/widget.js"></script>
 <script src="js/main.js"></script>
 
-<script>
+  <script>
   const menuToggle = document.getElementById("menuToggle");
   const mainNav = document.getElementById("mainNav");
 
