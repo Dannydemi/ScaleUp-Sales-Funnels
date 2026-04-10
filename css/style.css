@@ -3535,3 +3535,28 @@ section.hero {
   width: 100%;
   margin-top: auto;
 }
+
+/* ===== FINAL MOBILE MENU FIX ===== */
+@media (max-width: 768px) {
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 999;
+  }
+
+  .main-nav.active {
+    display: block;
+  }
+
+  .main-nav ul {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+  }
+
+}
