@@ -141,10 +141,24 @@
     }
 
     @media (max-width: 768px) {
-      .main-nav ul {
-        display: none;
-      }
-    }
+
+  .main-nav ul {
+    display: none;
+    flex-direction: column;
+    background: #ffffff;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    padding: 15px 0;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .main-nav.active ul {
+    display: flex;
+  }
+
+}
 
     /* ✅ ONLY FIX ADDED — DO NOT TOUCH ANYTHING ELSE */
 .calendly-inline-widget iframe {
