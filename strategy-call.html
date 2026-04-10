@@ -171,6 +171,39 @@
   width: 100% !important;
   min-height: 900px !important;
 }
+    /* ===== CLEAN MOBILE MENU DESIGN ===== */
+@media (max-width: 768px) {
+
+  .main-nav {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    z-index: 9999;
+    padding: 10px 0;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .main-nav ul li {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .main-nav ul li a {
+    display: block;
+    width: 100%;
+    color: #0f172a;
+    font-weight: 500;
+  }
+
+}
   </style>
 </head>
 
