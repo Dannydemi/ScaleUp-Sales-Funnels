@@ -3624,20 +3624,23 @@ html, body {
 
 }
 
-/* ===== FOOTER SOCIAL ICON CENTER FIX (MOBILE ONLY) ===== */
+/* ===== BLOG FOOTER FIX (SOCIAL ICON CENTER) ===== */
 @media (max-width: 768px) {
 
-  .footer-column {
+  .site-footer .footer-column {
     text-align: center;
   }
 
-  .footer-email {
+  .site-footer .footer-email {
     text-align: center;
   }
 
-  .footer-socials {
+  .site-footer .footer-socials {
+    display: flex;
     justify-content: center;
     align-items: center;
+    gap: 14px;
+    margin-top: 12px;
   }
 
 }
