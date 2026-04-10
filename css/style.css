@@ -3487,3 +3487,51 @@ section.hero {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* ================= PRICING WRAPPER ================= */
+
+.pricing-wrapper {
+  background: #f9fafb;
+  padding: 30px 15px;
+  border-radius: 16px;
+}
+
+/* ================= CARD SEPARATION ================= */
+
+.plan {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 25px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 420px;
+}
+
+/* HOVER EFFECT */
+.plan:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+/* FEATURED CARD (MAKE IT POP) */
+.plan.featured {
+  border: 2px solid #2563eb;
+  transform: scale(1.02);
+}
+
+/* SPACING BETWEEN TEXT */
+.plan ul {
+  margin: 20px 0;
+}
+
+/* BUTTON FULL WIDTH */
+.plan .btn {
+  width: 100%;
+  margin-top: auto;
+}
