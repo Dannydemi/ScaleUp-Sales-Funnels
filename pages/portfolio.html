@@ -2,10 +2,204 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Services — ScaleUp Sales Funnels</title>
   <!-- Correct CSS path from /pages/ -->
   <link rel="stylesheet" href="../css/style.css" />
+  
+  <style>
+    /* FIX: Prevent horizontal scroll on mobile */
+    html, body {
+      overflow-x: hidden !important;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      overflow-x: hidden;
+    }
+    
+    /* Fix container overflow */
+    .case-study-container {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* FIX: Mobile card display - FULL VISIBILITY */
+    @media (max-width: 768px) {
+      .case-study-container {
+        padding: 0 15px;
+        width: 100%;
+      }
+      
+      .case-study {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 20px 0 !important;
+        padding: 25px 20px !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        overflow: visible !important;
+      }
+      
+      .case-left, .case-right {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        display: block !important;
+      }
+      
+      .case-left {
+        margin-bottom: 25px !important;
+      }
+      
+      .case-right {
+        margin-top: 0 !important;
+        width: 100% !important;
+      }
+      
+      .case-big {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+        text-align: center !important;
+      }
+      
+      .case-stats {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 15px !important;
+        width: 100% !important;
+        justify-content: center !important;
+      }
+      
+      .stat-box {
+        flex: 1 !important;
+        min-width: 110px !important;
+        text-align: center !important;
+        padding: 15px 10px !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Ensure text wraps properly */
+      .case-desc, .case-left p, .case-left h2, .case-left h4, .case-left h5 {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+      }
+      
+      h2, h3, h4, h5, p {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+      }
+      
+      .results-container {
+        flex-direction: column !important;
+        padding: 0 20px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      .result-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 20px !important;
+        box-sizing: border-box !important;
+      }
+      
+      .hero-content {
+        padding: 0 20px !important;
+      }
+      
+      h1 {
+        font-size: 28px !important;
+        word-wrap: break-word !important;
+      }
+      
+      .cta-section {
+        padding: 40px 20px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      .cta-section h2, .cta-section p {
+        word-wrap: break-word !important;
+      }
+      
+      .footer-container {
+        flex-direction: column !important;
+        padding: 30px 20px !important;
+        gap: 30px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      .footer-column, .footer-brand {
+        width: 100% !important;
+      }
+      
+      .case-btn {
+        display: inline-block !important;
+        width: 100% !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+    }
+    
+    /* For very small screens */
+    @media (max-width: 480px) {
+      .case-study-container {
+        padding: 0 10px !important;
+      }
+      
+      .case-study {
+        padding: 20px 15px !important;
+      }
+      
+      .stat-box {
+        min-width: 90px !important;
+        padding: 10px 5px !important;
+      }
+      
+      .case-big span {
+        font-size: 36px !important;
+      }
+    }
+    
+    /* Ensure all images don't cause overflow */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Fix social icons hover issue */
+    .footer-socials a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+      overflow: hidden;
+    }
+    
+    .footer-socials a img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
@@ -117,7 +311,7 @@
 
       <div class="case-stats">
         <div class="stat-box">
-          <span class="dollar">$</span><span class="count" data-target="8400">0</span>
+          $<span class="count" data-target="8400">0</span>
           <p>Revenue Generated</p>
         </div>
         <div class="stat-box">
@@ -152,7 +346,7 @@
 
     <div class="case-right">
       <div class="case-big">
-        <span class="dollar">$</span><span class="count" data-target="500">0</span>
+        $<span class="count" data-target="500">0</span>
         <p>Revenue in First Week</p>
       </div>
 
@@ -276,6 +470,32 @@
 </footer>
 
 <script src="../js/main.js"></script>
-</body>
+<script>
+  // Set current year in footer
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+  
+  // Counter animation for stats
+  const counters = document.querySelectorAll('.count');
+  const speed = 200;
 
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = parseInt(counter.getAttribute('data-target'));
+      const current = parseInt(counter.innerText);
+      const increment = Math.ceil(target / speed);
+      
+      if (current < target) {
+        counter.innerText = current + increment;
+        setTimeout(updateCount, 20);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    
+    if (counter.getAttribute('data-target')) {
+      updateCount();
+    }
+  });
+</script>
+</body>
 </html>
