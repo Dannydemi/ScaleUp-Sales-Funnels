@@ -117,31 +117,29 @@
       color: #64748b;
     }
 
-    @media (max-width: 768px) {
+   @media (max-width: 768px) {
 
-      .main-nav {
-        display: none;
-      }
+  .main-nav {
+    display: none;
+  }
 
-      .main-nav.active {
-        display: block;
-      }
+  .main-nav.active {
+    display: block;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    z-index: 9999;
+  }
 
-      .main-nav.active ul {
-        display: flex;
-        flex-direction: column;
-        background: #ffffff;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        padding: 15px 0;
-        border-top: 1px solid #e2e8f0;
-        z-index: 999;
-      }
+  .main-nav.active ul {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+  }
 
-    }
-
+}
     .calendly-inline-widget iframe {
       width: 100% !important;
       min-height: 900px !important;
