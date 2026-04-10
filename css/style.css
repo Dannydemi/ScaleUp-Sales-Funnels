@@ -3565,3 +3565,26 @@ section.hero {
 html, body {
   overflow-x: hidden;
 }
+
+/* ===== PORTFOLIO MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  .case-study {
+    grid-template-columns: 1fr; /* stack layout */
+    gap: 30px;
+  }
+
+  .case-right {
+    width: 100%;
+  }
+
+  .case-stats {
+    grid-template-columns: 1fr; /* stack stat boxes */
+  }
+
+  .result-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+}
