@@ -10,31 +10,31 @@
 
   <!-- ================= HEADER ================= -->
   <header class="site-header">
-  <div class="header-inner">
+    <div class="header-inner">
 
-    <a href="index.html" class="logo">
-      <img src="assets/images/logo.png" alt="ScaleUp Sales Funnels Logo">
-    </a>
+      <a href="../index.html" class="logo">
+        <img src="../assets/images/logo.png" alt="ScaleUp Sales Funnels Logo">
+      </a>
 
-    <nav class="main-nav" id="mainNav">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="pages/services.html">Services</a></li>
-        <li><a href="pages/portfolio.html">Portfolio</a></li>
-        <li><a href="pages/blog.html">Blog</a></li>
-        <li><a href="pages/about.html">About</a></li>
-        <li><a href="pages/contact.html">Contact</a></li>
-      </ul>
-    </nav>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
 
-    <div class="header-cta">
-      <a href="strategy-call.html" class="btn btn-primary">Fix My Funnel — No Payment Until It Works</a>
+      <div class="header-cta">
+        <a href="strategy-call.html" class="btn btn-primary">Fix My Funnel — No Payment Until It Works</a>
+      </div>
+
+      <button class="menu-toggle" id="menuToggle">☰</button>
+
     </div>
-
-    <button class="menu-toggle" id="menuToggle">☰</button>
-
-  </div>
-</header>
+  </header>
 
   <!-- ================= MAIN CONTENT ================= -->
   <main class="page-content">
@@ -159,5 +159,9 @@
   </footer>
 
   <script src="../js/main.js"></script>
+  <script>
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
