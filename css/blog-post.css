@@ -375,3 +375,24 @@
 .site-footer .footer-socials a:nth-child(2) { background-color: #FF0000; } /* YouTube */
 .site-footer .footer-socials a:nth-child(3) { background-color: #00B140; } /* Upwork */
 .site-footer .footer-socials a:nth-child(4) { background-color: #000000; } /* TikTok */
+
+/* ===== BLOG FOOTER FIX (SOCIAL ICON CENTER) ===== */
+@media (max-width: 768px) {
+
+  .site-footer .footer-column {
+    text-align: center;
+  }
+
+  .site-footer .footer-email {
+    text-align: center;
+  }
+
+  .site-footer .footer-socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+}
