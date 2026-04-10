@@ -140,10 +140,14 @@
       display: inline-block;
     }
 
-    @media (max-width: 768px) {
+   @media (max-width: 768px) {
 
   .main-nav ul {
     display: none;
+  }
+
+  .main-nav.active ul {
+    display: flex;
     flex-direction: column;
     background: #ffffff;
     position: absolute;
@@ -152,10 +156,7 @@
     width: 100%;
     padding: 15px 0;
     border-top: 1px solid #e2e8f0;
-  }
-
-  .main-nav.active ul {
-    display: flex;
+    z-index: 999;
   }
 
 }
