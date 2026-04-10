@@ -29,6 +29,36 @@
       box-sizing: border-box;
     }
     
+    /* FIX: Social icons hover - ensure icons fit properly inside container */
+    .footer-socials a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+      overflow: hidden;
+    }
+    
+    .footer-socials a img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-socials a:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+    
+    .footer-socials a:hover img {
+      filter: brightness(0) invert(1);
+    }
+    
     /* Fix for mobile card display - FULL VISIBILITY */
     @media (max-width: 768px) {
       .case-study-container {
@@ -300,7 +330,8 @@
 
       <div class="case-stats">
         <div class="stat-box">
-          <span class="dollar">$</span><span class="count" data-target="8400">0</span>
+          <!-- FIXED: Removed extra dollar sign, only one $ here -->
+          $<span class="count" data-target="8400">0</span>
           <p>Revenue Generated</p>
         </div>
         <div class="stat-box">
@@ -335,7 +366,8 @@
 
     <div class="case-right">
       <div class="case-big">
-        <span class="dollar">$</span><span class="count" data-target="500">0</span>
+        <!-- FIXED: Removed extra dollar sign -->
+        $<span class="count" data-target="500">0</span>
         <p>Revenue in First Week</p>
       </div>
 
