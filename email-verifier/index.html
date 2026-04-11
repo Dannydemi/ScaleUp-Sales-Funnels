@@ -189,7 +189,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
 const API_URL    = "https://email-verifier-dkrb.onrender.com/verify";
-const LEAD_URL = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpTfbPN5APEuR0_LcLUnumZVdrOtoJ5OoogpeqV-bRIupH22/exec";
+const LEAD_URL   = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpTfbPN5APEuR0_LcLUnumZVdrOtoJ5OoogpeqV-bRIupH22/exec";
 const GUMROAD    = "https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000";
 const FREE_LIMIT = 100;
 
@@ -269,11 +269,11 @@ function startBulk() {
   reader.readAsArrayBuffer(file);
 }
 
-// ── USAGE CHECK via GET to avoid CORS preflight ──
+// ── CHECK USAGE via GET — no CORS preflight ──
 async function checkUsageRemote(userEmail) {
   try {
     const url = LEAD_URL + "?action=checkUsage&userEmail=" + encodeURIComponent(userEmail);
-    const res = await fetch(url);
+    const res  = await fetch(url);
     const data = await res.json();
     return parseInt(data.count || 0);
   } catch(e) {
@@ -281,20 +281,19 @@ async function checkUsageRemote(userEmail) {
   }
 }
 
-// ── RECORD USAGE via no-cors POST (fire and forget) ──
+// ── RECORD USAGE via GET — no CORS preflight ──
 function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
   try {
-    const url =
-      LEAD_URL +
-      "?action=record" +
-      "&userEmail=" + encodeURIComponent(userEmail) +
-      "&type=" + encodeURIComponent(type) +
-      "&checkedEmail=" + encodeURIComponent(checkedEmail) +
-      "&usageCount=" + encodeURIComponent(usageCount);
-
-    fetch(url); // simple GET request
-  } catch (e) {}
+    const url = LEAD_URL
+      + "?action=recordUsage"
+      + "&userEmail="    + encodeURIComponent(userEmail)
+      + "&type="         + encodeURIComponent(type)
+      + "&checkedEmail=" + encodeURIComponent(checkedEmail)
+      + "&usageCount="   + encodeURIComponent(usageCount);
+    fetch(url);
+  } catch(e) {}
 }
+
 async function handleGate() {
   const userEmail = document.getElementById('userEmail').value.trim();
   const btn       = document.getElementById('unlockBtn');
@@ -302,28 +301,23 @@ async function handleGate() {
   const emailRx   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   errEl.textContent = '';
-  if (!emailRx.test(userEmail)) { errEl.textContent = 'Please enter a valid email address.'; return; }
+  if (!emailRx.test(userEmail)) {
+    errEl.textContent = 'Please enter a valid email address.'; return;
+  }
 
   btn.disabled    = true;
   btn.textContent = 'Checking…';
 
   try {
-    // Step 1: validate email is real
-    const valRes  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: userEmail }) });
-    const valData = await valRes.json();
-    if (!valData.valid || valData.status === 'DANGEROUS') {
-      errEl.textContent = 'Please use a real, active email address to continue.';
-      btn.disabled = false; btn.textContent = 'Continue →'; return;
-    }
-
-    // Step 2: check server-side usage via GET (no CORS issue)
+    // Check server-side usage via GET — no CORS issue
     const serverCount = await checkUsageRemote(userEmail);
+
     if (serverCount >= FREE_LIMIT) {
       errEl.innerHTML = `You've used all 100 free checks with this email. <a href="${GUMROAD}" target="_blank" style="color:#2563eb;font-weight:600">Get Pro for $27 →</a>`;
       btn.disabled = false; btn.textContent = 'Continue →'; return;
     }
 
-    // Step 3: update session
+    // Update session with server count
     sessionEmail = userEmail;
     sessionUsage = serverCount;
     localStorage.setItem('lr_email', sessionEmail);
@@ -364,7 +358,7 @@ async function runVerification(emails, type, userEmail) {
     await new Promise(r => setTimeout(r, 200));
   }
 
-  // Record usage — fire and forget, no-cors
+  // Record usage via GET — fire and forget
   recordUsageRemote(userEmail, type, capped.map(e => e.email).join(', '), capped.length);
 
   // Update local session
