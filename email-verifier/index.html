@@ -286,10 +286,7 @@ function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
   try {
     fetch(LEAD_URL, {
       method: "POST",
-      mode: "no-cors", // ✅ REQUIRED
-      headers: {
-        "Content-Type": "application/json" // 🔥 FIX
-      },
+      mode: "no-cors",
       body: JSON.stringify({
         userEmail,
         type,
@@ -297,7 +294,7 @@ function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
         usageCount
       })
     });
-  } catch(e) {}
+  } catch (e) {}
 }
 
 async function handleGate() {
