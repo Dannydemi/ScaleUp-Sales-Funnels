@@ -6,365 +6,84 @@
   <title>LaunchReady — Free Email List Cleaner for Coaches</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #f1f5f9;
-      color: #0f172a;
-      min-height: 100vh;
-    }
-
-    .nav {
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; color: #0f172a; min-height: 100vh; }
+    .nav { background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
     .nav-brand { font-size: 15px; font-weight: 600; color: #0f172a; text-decoration: none; }
     .nav-brand span { color: #2563eb; }
     .nav-link { font-size: 13px; color: #64748b; text-decoration: none; }
     .nav-link:hover { color: #2563eb; }
-
-    .hero {
-      text-align: center;
-      padding: 56px 24px 32px;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 4px 12px;
-      border-radius: 999px;
-      margin-bottom: 18px;
-    }
-    .hero h1 {
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 1.25;
-      color: #0f172a;
-      margin-bottom: 14px;
-    }
+    .hero { text-align: center; padding: 56px 24px 32px; max-width: 640px; margin: 0 auto; }
+    .hero-badge { display: inline-block; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 4px 12px; border-radius: 999px; margin-bottom: 18px; }
+    .hero h1 { font-size: 32px; font-weight: 700; line-height: 1.25; color: #0f172a; margin-bottom: 14px; }
     .hero h1 span { color: #2563eb; }
-    .hero p {
-      font-size: 16px;
-      color: #475569;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
+    .hero p { font-size: 16px; color: #475569; line-height: 1.6; margin-bottom: 24px; }
+    .hero-stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
     .hero-stat { text-align: center; }
     .hero-stat strong { display: block; font-size: 22px; font-weight: 700; color: #2563eb; }
     .hero-stat span { font-size: 12px; color: #64748b; }
-
-    .proof-bar {
-      max-width: 520px;
-      margin: 28px auto 0;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .proof-bar { max-width: 520px; margin: 28px auto 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
     .proof-icon { width: 44px; height: 44px; flex-shrink: 0; }
     .proof-text { font-size: 13px; color: #374151; line-height: 1.5; }
     .proof-text strong { color: #0f172a; font-weight: 600; }
     .proof-text span { color: #64748b; font-size: 12px; display: block; margin-top: 2px; }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 520px;
-      margin: 24px auto 0;
-    }
-
-    .tabs {
-      display: flex;
-      background: #f1f5f9;
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 24px;
-      gap: 4px;
-    }
-    .tab {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      border-radius: 7px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      background: transparent;
-      color: #64748b;
-      transition: all 0.15s;
-    }
-    .tab.active {
-      background: #ffffff;
-      color: #0f172a;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
+    .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; max-width: 520px; margin: 24px auto 0; }
+    .tabs { display: flex; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 24px; gap: 4px; }
+    .tab { flex: 1; padding: 9px; border: none; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: #64748b; transition: all 0.15s; }
+    .tab.active { background: #ffffff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .panel { display: none; }
     .panel.active { display: block; }
-
-    .limit-notice {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
+    .limit-notice { display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; }
     .limit-notice span { color: #1e40af; }
     .limit-notice a { color: #2563eb; font-weight: 600; text-decoration: none; font-size: 12px; }
     .limit-notice a:hover { text-decoration: underline; }
-
-    .usage-counter {
-      font-size: 13px;
-      margin-bottom: 12px;
-      padding: 8px 0;
-      min-height: 28px;
-    }
-
-    .field-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 6px;
-      display: block;
-    }
-    input[type="email"],
-    input[type="file"] {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #0f172a;
-      background: #f8fafc;
-      margin-bottom: 12px;
-      outline: none;
-      transition: border 0.15s;
-    }
-    input[type="email"]:focus,
-    input[type="file"]:focus { border-color: #2563eb; background: #fff; }
-
-    .btn-primary {
-      width: 100%;
-      padding: 13px;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
+    .usage-counter { font-size: 13px; margin-bottom: 12px; padding: 8px 0; min-height: 28px; }
+    .field-label { font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 6px; display: block; }
+    input[type="email"], input[type="file"] { width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #0f172a; background: #f8fafc; margin-bottom: 12px; outline: none; transition: border 0.15s; }
+    input[type="email"]:focus, input[type="file"]:focus { border-color: #2563eb; background: #fff; }
+    .btn-primary { width: 100%; padding: 13px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
     .btn-primary:hover { background: #1d4ed8; }
     .btn-primary:disabled { background: #93c5fd; cursor: not-allowed; }
-
-    .btn-secondary {
-      width: 100%;
-      padding: 10px;
-      background: transparent;
-      color: #374151;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      margin-top: 8px;
-    }
+    .btn-secondary { width: 100%; padding: 10px; background: transparent; color: #374151; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-top: 8px; }
     .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
-
-    .status {
-      font-size: 13px;
-      color: #64748b;
-      text-align: center;
-      padding: 8px 0;
-      min-height: 24px;
-    }
-
-    .results-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
+    .status { font-size: 13px; color: #64748b; text-align: center; padding: 8px 0; min-height: 24px; }
+    .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .results-title { font-size: 14px; font-weight: 600; color: #0f172a; }
     .results-count { font-size: 12px; color: #64748b; }
-
-    .result-table-wrap {
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
+    .result-table-wrap { border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-    th {
-      background: #f8fafc;
-      padding: 9px 12px;
-      text-align: left;
-      font-weight: 500;
-      color: #374151;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 12px;
-    }
-    td {
-      padding: 9px 12px;
-      border-bottom: 1px solid #f1f5f9;
-      color: #374151;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    th { background: #f8fafc; padding: 9px 12px; text-align: left; font-weight: 500; color: #374151; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
+    td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; color: #374151; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
-
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-    .badge.safe   { background: #dcfce7; color: #166534; }
-    .badge.risky  { background: #fef9c3; color: #854d0e; }
+    .badge.safe { background: #dcfce7; color: #166534; }
+    .badge.risky { background: #fef9c3; color: #854d0e; }
     .badge.danger { background: #fee2e2; color: #991b1b; }
-
-    .download-row {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .upgrade-box {
-      display: none;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      margin-top: 8px;
-    }
+    .download-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; margin-bottom: 16px; }
+    .upgrade-box { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; text-align: center; margin-top: 8px; }
     .upgrade-box.visible { display: block; }
     .upgrade-box h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
     .upgrade-box p { font-size: 13px; color: #475569; margin-bottom: 14px; line-height: 1.5; }
     .upgrade-box p strong { color: #dc2626; }
-    .btn-upgrade {
-      display: inline-block;
-      background: #2563eb;
-      color: #fff;
-      text-decoration: none;
-      padding: 11px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: background 0.15s;
-    }
+    .btn-upgrade { display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: background 0.15s; }
     .btn-upgrade:hover { background: #1d4ed8; }
     .upgrade-sub { font-size: 11px; color: #94a3b8; margin-top: 8px; }
-
-    .how {
-      max-width: 520px;
-      margin: 32px auto 0;
-      padding: 0 0 8px;
-    }
-    .how-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .how-steps {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-    }
-    .how-step {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px 14px;
-      text-align: center;
-    }
-    .how-num {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #eff6ff;
-      color: #2563eb;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px;
-    }
+    .how { max-width: 520px; margin: 32px auto 0; padding: 0 0 8px; }
+    .how-title { font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; text-align: center; margin-bottom: 20px; }
+    .how-steps { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+    .how-step { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 14px; text-align: center; }
+    .how-num { width: 28px; height: 28px; border-radius: 50%; background: #eff6ff; color: #2563eb; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
     .how-step h4 { font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 5px; }
-    .how-step p  { font-size: 12px; color: #64748b; line-height: 1.5; }
-
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.6);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
+    .how-step p { font-size: 12px; color: #64748b; line-height: 1.5; }
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 100; align-items: center; justify-content: center; }
     .modal-backdrop.open { display: flex; }
-    .modal {
-      background: #fff;
-      border-radius: 14px;
-      padding: 28px 24px;
-      width: 340px;
-      text-align: center;
-    }
+    .modal { background: #fff; border-radius: 14px; padding: 28px 24px; width: 340px; text-align: center; }
     .modal h3 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-    .modal p  { font-size: 13px; color: #64748b; margin-bottom: 16px; line-height: 1.5; }
-    .modal input {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 10px;
-      outline: none;
-      color: #0f172a;
-    }
+    .modal p { font-size: 13px; color: #64748b; margin-bottom: 16px; line-height: 1.5; }
+    .modal input { width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 10px; outline: none; color: #0f172a; }
     .modal input:focus { border-color: #2563eb; }
     .modal-note { font-size: 11px; color: #94a3b8; margin-top: 8px; }
-    .modal-error {
-      font-size: 12px;
-      color: #dc2626;
-      margin-top: 6px;
-      min-height: 18px;
-    }
-
-    .trust-bar {
-      text-align: center;
-      padding: 32px 24px 48px;
-      font-size: 12px;
-      color: #94a3b8;
-    }
+    .modal-error { font-size: 12px; color: #dc2626; margin-top: 6px; min-height: 18px; }
+    .trust-bar { text-align: center; padding: 32px 24px 48px; font-size: 12px; color: #94a3b8; }
     .trust-bar a { color: #2563eb; text-decoration: none; }
     .trust-bar a:hover { text-decoration: underline; }
   </style>
@@ -372,12 +91,8 @@
 <body>
 
 <nav class="nav">
-  <a href="https://www.scaleupsalesfunnels.com" class="nav-brand" target="_blank">
-    ScaleUp<span>Funnels</span>
-  </a>
-  <a href="https://www.scaleupsalesfunnels.com" class="nav-link" target="_blank">
-    Need a full funnel? →
-  </a>
+  <a href="https://www.scaleupsalesfunnels.com" class="nav-brand" target="_blank">ScaleUp<span>Funnels</span></a>
+  <a href="https://www.scaleupsalesfunnels.com" class="nav-link" target="_blank">Need a full funnel? →</a>
 </nav>
 
 <div class="hero">
@@ -394,12 +109,8 @@
 <div class="proof-bar">
   <svg class="proof-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="44" height="44" rx="10" fill="#f0fdf4"/>
-    <path d="M22 6 L36 12 L36 24 C36 33 22 40 22 40 C22 40 8 33 8 24 L8 12 Z"
-          fill="#16a34a" fill-opacity="0.15"
-          stroke="#16a34a" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M16 22 L20 26 L28 17"
-          stroke="#16a34a" stroke-width="2.2"
-          stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M22 6 L36 12 L36 24 C36 33 22 40 22 40 C22 40 8 33 8 24 L8 12 Z" fill="#16a34a" fill-opacity="0.15" stroke="#16a34a" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M16 22 L20 26 L28 17" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
   <div class="proof-text">
     <strong>Built by ScaleUp Sales Funnels</strong>
@@ -412,7 +123,6 @@
     <button class="tab active" onclick="switchTab('single')">Single email</button>
     <button class="tab" onclick="switchTab('bulk')">Bulk upload</button>
   </div>
-
   <div class="panel active" id="panel-single">
     <label class="field-label">Enter an email address</label>
     <input type="email" id="email" placeholder="e.g. coach@example.com" />
@@ -420,7 +130,6 @@
     <button class="btn-primary" id="btn-single" onclick="startSingle()">Check this email</button>
     <div class="status" id="status-single"></div>
   </div>
-
   <div class="panel" id="panel-bulk">
     <div class="limit-notice">
       <span>Free plan: up to <strong>100 emails</strong></span>
@@ -432,28 +141,20 @@
     <button class="btn-primary" id="btn-bulk" onclick="startBulk()">Clean my list</button>
     <div class="status" id="status-bulk"></div>
   </div>
-
   <div id="results-area" style="display:none; margin-top:24px; padding-top:20px; border-top:1px solid #f1f5f9;">
     <div class="results-header">
       <span class="results-title">Your results</span>
       <span class="results-count" id="results-count"></span>
     </div>
-    <div class="result-table-wrap">
-      <div id="result"></div>
-    </div>
+    <div class="result-table-wrap"><div id="result"></div></div>
     <div class="download-row">
       <button class="btn-secondary" onclick="downloadCSV()">Download all results</button>
       <button class="btn-secondary" onclick="downloadSafeCSV()">Download safe only</button>
     </div>
     <div class="upgrade-box" id="upgrade-box">
       <h3>Your list has risky addresses</h3>
-      <p>
-        <strong id="risky-count"></strong> of your emails are risky or dangerous —
-        that's money wasted on dead addresses and a real threat to your sender reputation.
-      </p>
-      <a href="https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000" class="btn-upgrade" target="_blank">
-        Clean your full list — $27 one-time →
-      </a>
+      <p><strong id="risky-count"></strong> of your emails are risky or dangerous — that's money wasted on dead addresses and a real threat to your sender reputation.</p>
+      <a href="https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000" class="btn-upgrade" target="_blank">Clean your full list — $27 one-time →</a>
       <div class="upgrade-sub">Up to 5,000 emails · Results within 24 hours · One-time payment</div>
     </div>
   </div>
@@ -462,32 +163,18 @@
 <div class="how">
   <div class="how-title">How it works</div>
   <div class="how-steps">
-    <div class="how-step">
-      <div class="how-num">1</div>
-      <h4>Upload your list</h4>
-      <p>Paste a single email or upload a CSV / Excel file of up to 100 addresses for free.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-num">2</div>
-      <h4>We check every address</h4>
-      <p>Each email is scored as Safe, Risky, or Dangerous based on real deliverability signals.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-num">3</div>
-      <h4>Download your clean list</h4>
-      <p>Export only the safe addresses and re-import into your email platform — launch protected.</p>
-    </div>
+    <div class="how-step"><div class="how-num">1</div><h4>Upload your list</h4><p>Paste a single email or upload a CSV / Excel file of up to 100 addresses for free.</p></div>
+    <div class="how-step"><div class="how-num">2</div><h4>We check every address</h4><p>Each email is scored as Safe, Risky, or Dangerous based on real deliverability signals.</p></div>
+    <div class="how-step"><div class="how-num">3</div><h4>Download your clean list</h4><p>Export only the safe addresses and re-import into your email platform — launch protected.</p></div>
   </div>
 </div>
 
 <div class="trust-bar">
-  Built by <a href="https://www.scaleupsalesfunnels.com" target="_blank">ScaleUp Sales Funnels</a>
-  · Helping coaches build funnels that actually convert
+  Built by <a href="https://www.scaleupsalesfunnels.com" target="_blank">ScaleUp Sales Funnels</a> · Helping coaches build funnels that actually convert
   <br style="margin-bottom:6px"/>
   Questions? <a href="mailto:contact@scaleupsalesfunnels.com">contact@scaleupsalesfunnels.com</a>
 </div>
 
-<!-- EMAIL GATE MODAL — fires BEFORE verification -->
 <div class="modal-backdrop" id="leadModal">
   <div class="modal">
     <h3>Enter your email to continue</h3>
@@ -506,15 +193,14 @@ const LEAD_URL   = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOd
 const GUMROAD    = "https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000";
 const FREE_LIMIT = 100;
 
-let lastResults    = [];
-let originalRows   = [];
-let headers        = [];
-let pendingEmails  = [];
-let pendingType    = "";
-let sessionEmail   = localStorage.getItem('lr_email') || "";
-let sessionUsage   = parseInt(localStorage.getItem('lr_usage') || '0');
+let lastResults   = [];
+let originalRows  = [];
+let headers       = [];
+let pendingEmails = [];
+let pendingType   = "";
+let sessionEmail  = localStorage.getItem('lr_email') || "";
+let sessionUsage  = parseInt(localStorage.getItem('lr_usage') || '0');
 
-// ── COUNTER DISPLAY ──
 function renderCounter() {
   const remaining = Math.max(0, FREE_LIMIT - sessionUsage);
   const limitHit  = remaining === 0;
@@ -528,7 +214,6 @@ function renderCounter() {
   document.getElementById('btn-bulk').disabled   = limitHit;
 }
 
-// ── TAB SWITCHER ──
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', (i === 0 && tab === 'single') || (i === 1 && tab === 'bulk'));
@@ -538,13 +223,10 @@ function switchTab(tab) {
   document.getElementById('results-area').style.display = 'none';
 }
 
-// ── GATE HELPERS ──
 function openGate(type) {
   pendingType = type;
   document.getElementById('modal-error').textContent = '';
-  if (sessionEmail) {
-    document.getElementById('userEmail').value = sessionEmail;
-  }
+  if (sessionEmail) document.getElementById('userEmail').value = sessionEmail;
   document.getElementById('leadModal').classList.add('open');
 }
 
@@ -552,7 +234,6 @@ function closeGate() {
   document.getElementById('leadModal').classList.remove('open');
 }
 
-// ── ENTRY POINTS ──
 function startSingle() {
   const email = document.getElementById('email').value.trim();
   if (!email) { document.getElementById('status-single').textContent = 'Please enter an email address.'; return; }
@@ -566,7 +247,6 @@ function startBulk() {
   const status = document.getElementById('status-bulk');
   if (!file) { status.textContent = 'Please select a file first.'; return; }
   if (sessionUsage >= FREE_LIMIT) { status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.'; return; }
-
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
@@ -589,7 +269,36 @@ function startBulk() {
   reader.readAsArrayBuffer(file);
 }
 
-// ── GATE HANDLER — checks usage server-side before proceeding ──
+// ── USAGE CHECK via GET to avoid CORS preflight ──
+async function checkUsageRemote(userEmail) {
+  try {
+    const url = LEAD_URL + "?action=checkUsage&userEmail=" + encodeURIComponent(userEmail);
+    const res = await fetch(url);
+    const data = await res.json();
+    return parseInt(data.count || 0);
+  } catch(e) {
+    return sessionUsage;
+  }
+}
+
+// ── RECORD USAGE via no-cors POST (fire and forget) ──
+function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
+  try {
+    fetch(LEAD_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: {'Content-Type': 'text/plain'},
+      body:    JSON.stringify({
+        action: 'recordUsage',
+        userEmail,
+        type,
+        checkedEmail,
+        usageCount
+      })
+    });
+  } catch(e) {}
+}
+
 async function handleGate() {
   const userEmail = document.getElementById('userEmail').value.trim();
   const btn       = document.getElementById('unlockBtn');
@@ -611,11 +320,8 @@ async function handleGate() {
       btn.disabled = false; btn.textContent = 'Continue →'; return;
     }
 
-    // Step 2: check server-side usage for this email
-    const usageRes  = await fetch(LEAD_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action: 'checkUsage', userEmail }) });
-    const usageData = await usageRes.json();
-    const serverCount = parseInt(usageData.count || 0);
-
+    // Step 2: check server-side usage via GET (no CORS issue)
+    const serverCount = await checkUsageRemote(userEmail);
     if (serverCount >= FREE_LIMIT) {
       errEl.innerHTML = `You've used all 100 free checks with this email. <a href="${GUMROAD}" target="_blank" style="color:#2563eb;font-weight:600">Get Pro for $27 →</a>`;
       btn.disabled = false; btn.textContent = 'Continue →'; return;
@@ -628,13 +334,7 @@ async function handleGate() {
     localStorage.setItem('lr_usage', sessionUsage);
 
     closeGate();
-
-    // Step 4: run verification
-    if (pendingType === 'single') {
-      await runVerification(pendingEmails, 'single', userEmail);
-    } else {
-      await runVerification(pendingEmails, 'bulk', userEmail);
-    }
+    await runVerification(pendingEmails, pendingType, userEmail);
 
   } catch(err) {
     errEl.textContent = 'Something went wrong. Please try again.';
@@ -644,7 +344,6 @@ async function handleGate() {
   btn.textContent = 'Continue →';
 }
 
-// ── CORE VERIFICATION ──
 async function runVerification(emails, type, userEmail) {
   const status    = document.getElementById(type === 'single' ? 'status-single' : 'status-bulk');
   const btn       = document.getElementById(type === 'single' ? 'btn-single' : 'btn-bulk');
@@ -652,7 +351,6 @@ async function runVerification(emails, type, userEmail) {
   const capped    = emails.slice(0, remaining);
 
   btn.disabled = true;
-
   if (type === 'bulk' && capped.length < emails.length) {
     status.textContent = `Free plan: checking first ${capped.length} of ${emails.length} emails. Upgrade for the full list.`;
   }
@@ -670,22 +368,11 @@ async function runVerification(emails, type, userEmail) {
     await new Promise(r => setTimeout(r, 200));
   }
 
-  // Step 5: record usage in sheet
-  const newCount = capped.length;
-  await fetch(LEAD_URL, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      action:       'recordUsage',
-      userEmail,
-      type,
-      checkedEmail: capped.map(e => e.email).join(', '),
-      usageCount:   newCount
-    })
-  });
+  // Record usage — fire and forget, no-cors
+  recordUsageRemote(userEmail, type, capped.map(e => e.email).join(', '), capped.length);
 
   // Update local session
-  sessionUsage += newCount;
+  sessionUsage += capped.length;
   localStorage.setItem('lr_usage', sessionUsage);
   renderCounter();
 
@@ -694,39 +381,24 @@ async function runVerification(emails, type, userEmail) {
   displayTable(results);
 }
 
-// ── DISPLAY TABLE ──
 function displayTable(results) {
   lastResults = results;
   const riskyCount = results.filter(r => r.status === 'RISKY' || r.status === 'DANGEROUS').length;
   const total      = results.length;
-
   document.getElementById('results-count').textContent = `${total} email${total !== 1 ? 's' : ''} checked`;
-
   let rows = '';
   results.forEach(r => {
     const cls = r.status === 'SAFE' ? 'safe' : r.status === 'RISKY' ? 'risky' : 'danger';
-    rows += `<tr>
-      <td style="width:55%">${r.email}</td>
-      <td style="width:25%"><span class="badge ${cls}">${r.status}</span></td>
-      <td style="width:20%">${r.score}</td>
-    </tr>`;
+    rows += `<tr><td style="width:55%">${r.email}</td><td style="width:25%"><span class="badge ${cls}">${r.status}</span></td><td style="width:20%">${r.score}</td></tr>`;
   });
-
-  document.getElementById('result').innerHTML = `
-    <table>
-      <thead><tr><th>Email</th><th>Status</th><th>Score</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-
+  document.getElementById('result').innerHTML = `<table><thead><tr><th>Email</th><th>Status</th><th>Score</th></tr></thead><tbody>${rows}</tbody></table>`;
   document.getElementById('results-area').style.display = 'block';
-
   if (riskyCount > 0) {
     document.getElementById('risky-count').textContent = `${riskyCount} email${riskyCount !== 1 ? 's' : ''}`;
     document.getElementById('upgrade-box').classList.add('visible');
   }
 }
 
-// ── DOWNLOADS ──
 function downloadCSV() {
   if (!lastResults.length) return;
   let csv = 'Email,Status,Score\n';
@@ -744,8 +416,8 @@ function downloadSafeCSV() {
 }
 
 function triggerDownload(content, filename) {
-  const a    = document.createElement('a');
-  a.href     = URL.createObjectURL(new Blob([content]));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content]));
   a.download = filename;
   a.click();
 }
