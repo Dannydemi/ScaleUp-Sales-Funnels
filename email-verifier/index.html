@@ -1,356 +1,697 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Email Verifier</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LaunchReady — Email List Cleaner for Coaches</title>
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+    }
+
+    /* ── TOP NAV ── */
+    .nav {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .nav-brand span { color: #2563eb; }
+    .nav-link {
+      font-size: 13px;
+      color: #64748b;
+      text-decoration: none;
+    }
+    .nav-link:hover { color: #2563eb; }
+
+    /* ── HERO ── */
+    .hero {
       text-align: center;
-      margin: 0;
+      padding: 56px 24px 40px;
+      max-width: 640px;
+      margin: 0 auto;
     }
-
-    .header {
-      padding: 20px;
+    .hero-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #0f172a;
+      margin-bottom: 14px;
+    }
+    .hero h1 span { color: #2563eb; }
+    .hero p {
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat strong {
+      display: block;
       font-size: 22px;
-      font-weight: bold;
-      color: #3b82f6;
+      font-weight: 700;
+      color: #2563eb;
+    }
+    .hero-stat span {
+      font-size: 12px;
+      color: #64748b;
     }
 
-    .sub {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-top: 5px;
+    /* ── MAIN CARD ── */
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 520px;
+      margin: 0 auto 32px;
     }
 
-    .box {
-      background: #1e293b;
-      padding: 25px;
-      margin: 40px auto;
-      width: 420px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
     }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
+    .tab {
+      flex: 1;
+      padding: 9px;
       border: none;
-    }
-
-    button {
-      background: #3b82f6;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #2563eb;
-    }
-
-    .result {
-      margin-top: 20px;
-      background: #020617;
-      padding: 12px;
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 13px;
-      overflow-x: auto;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+    .tab.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── FREE LIMIT BADGE ── */
+    .limit-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .limit-notice span { color: #1e40af; }
+    .limit-notice a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .limit-notice a:hover { text-decoration: underline; }
+
+    /* ── INPUTS ── */
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input[type="email"],
+    input[type="file"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #0f172a;
+      background: #f8fafc;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border 0.15s;
+    }
+    input[type="email"]:focus,
+    input[type="file"]:focus {
+      border-color: #2563eb;
+      background: #fff;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:disabled {
+      background: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: #374151;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 8px;
+    }
+    .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+    /* ── STATUS ── */
+    .status {
+      font-size: 13px;
+      color: #64748b;
+      text-align: center;
+      padding: 8px 0;
+      min-height: 24px;
+    }
+
+    /* ── RESULTS ── */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .results-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .results-count {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .result-table-wrap {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 13px;
+      table-layout: fixed;
     }
-
-    th, td {
-      padding: 8px;
-      border-bottom: 1px solid #334155;
-      text-align: left;
-    }
-
     th {
-      background: #1e293b;
+      background: #f8fafc;
+      padding: 9px 12px;
+      text-align: left;
+      font-weight: 500;
+      color: #374151;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 12px;
     }
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #374151;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    tr:last-child td { border-bottom: none; }
 
     .badge {
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge.safe    { background: #dcfce7; color: #166534; }
+    .badge.risky   { background: #fef9c3; color: #854d0e; }
+    .badge.danger  { background: #fee2e2; color: #991b1b; }
+
+    /* ── DOWNLOAD BUTTONS ── */
+    .download-row {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 8px;
+      margin-bottom: 16px;
     }
 
-    .safe { background: #065f46; color: #10b981; }
-    .risky { background: #78350f; color: #f59e0b; }
-    .danger { background: #7f1d1d; color: #ef4444; }
+    /* ── UPGRADE CTA ── */
+    .upgrade-box {
+      display: none;
+      background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .upgrade-box.visible { display: block; }
+    .upgrade-box h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .upgrade-box p {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .upgrade-box p strong { color: #dc2626; }
+    .btn-upgrade {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      text-decoration: none;
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-upgrade:hover { background: #1d4ed8; }
+    .upgrade-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
 
-    .loader {
+    /* ── MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.6);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 24px;
+      width: 320px;
+      text-align: center;
+    }
+    .modal h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .modal p {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .modal input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .modal input:focus { border-color: #2563eb; }
+    .modal-note {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    /* ── TRUST FOOTER ── */
+    .trust-bar {
+      text-align: center;
+      padding: 16px 24px 40px;
       font-size: 12px;
       color: #94a3b8;
     }
+    .trust-bar a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .trust-bar a:hover { text-decoration: underline; }
   </style>
 </head>
-
 <body>
 
-<div class="header">
-  ScaleUp Email Verifier
-  <div class="sub">Clean your leads. Improve deliverability.</div>
+<!-- NAV -->
+<nav class="nav">
+  <a href="https://www.scaleupsalesfunnels.com" class="nav-brand" target="_blank">
+    ScaleUp<span>Funnels</span>
+  </a>
+  <a href="https://www.scaleupsalesfunnels.com" class="nav-link" target="_blank">
+    Need a full funnel? →
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Free Email List Cleaner for Coaches</div>
+  <h1>Is your email list<br><span>killing your launches?</span></h1>
+  <p>The average coach's list has 20–30% invalid addresses. Every bad email hurts your deliverability score — and tanks open rates right before a launch.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <strong>23%</strong>
+      <span>avg. invalid rate</span>
+    </div>
+    <div class="hero-stat">
+      <strong>$0</strong>
+      <span>to check 100 emails</span>
+    </div>
+    <div class="hero-stat">
+      <strong>30 sec</strong>
+      <span>to get results</span>
+    </div>
+  </div>
 </div>
 
-<div class="box">
+<!-- MAIN CARD -->
+<div class="card">
 
-  <input type="email" id="email" placeholder="Enter single email..." />
-  <button onclick="verifyEmail()">Verify One</button>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('single')">Single email</button>
+    <button class="tab" onclick="switchTab('bulk')">Bulk upload</button>
+  </div>
 
-  <hr>
+  <!-- SINGLE PANEL -->
+  <div class="panel active" id="panel-single">
+    <label class="field-label">Enter an email address</label>
+    <input type="email" id="email" placeholder="e.g. coach@example.com" />
+    <button class="btn-primary" id="btn-single" onclick="verifyEmail()">Check this email</button>
+    <div class="status" id="status-single"></div>
+  </div>
 
-  <input type="file" id="file" />
-  <button onclick="verifyBulk()">Upload & Verify Bulk</button>
+  <!-- BULK PANEL -->
+  <div class="panel" id="panel-bulk">
+    <div class="limit-notice">
+      <span>Free plan: up to <strong>100 emails</strong></span>
+      <a href="YOUR_GUMROAD_LINK_HERE" target="_blank">Need 5,000? Get Pro — $27 →</a>
+    </div>
+    <label class="field-label">Upload your list (.xlsx or .csv)</label>
+    <input type="file" id="file" accept=".xlsx,.csv,.xls" />
+    <button class="btn-primary" id="btn-bulk" onclick="verifyBulk()">Clean my list</button>
+    <div class="status" id="status-bulk"></div>
+  </div>
 
-  <button onclick="downloadCSV()">Download Results</button>
-  <button onclick="downloadSafeCSV()">Download SAFE Emails Only</button>
-  
-  <div class="result" id="result">Result will appear here...</div>
+  <!-- RESULTS AREA (hidden until results load) -->
+  <div id="results-area" style="display:none; margin-top:24px; padding-top:20px; border-top:1px solid #f1f5f9;">
+    <div class="results-header">
+      <span class="results-title">Your results</span>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <div class="result-table-wrap">
+      <div id="result"></div>
+    </div>
+
+    <div class="download-row">
+      <button class="btn-secondary" onclick="downloadCSV()">Download all results</button>
+      <button class="btn-secondary" onclick="downloadSafeCSV()">Download safe only</button>
+    </div>
+
+    <!-- UPGRADE CTA — appears after results -->
+    <div class="upgrade-box" id="upgrade-box">
+      <h3>Your list has risky addresses</h3>
+      <p>
+        <strong id="risky-count"></strong> of your emails are risky or dangerous —
+        that's money wasted on dead addresses and a threat to your sender reputation.
+      </p>
+      <a href="YOUR_GUMROAD_LINK_HERE" class="btn-upgrade" target="_blank">
+        Clean your full list — $27 one-time →
+      </a>
+      <div class="upgrade-sub">Up to 5,000 emails · Results within 24 hours · One-time payment</div>
+    </div>
+  </div>
+
 </div>
 
-<!-- MODAL -->
-<div id="leadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
-  <div style="background:#1e293b; padding:20px; border-radius:10px; width:300px;">
-    <h3>Enter your email to view results</h3>
-    <input type="email" id="userEmail" placeholder="Your email" />
-    <button id="unlockBtn" onclick="unlockResults()">Unlock Results</button>
+<!-- TRUST FOOTER -->
+<div class="trust-bar">
+  Built by <a href="https://www.scaleupsalesfunnels.com" target="_blank">ScaleUp Sales Funnels</a>
+  · Helping coaches build funnels that actually convert
+</div>
+
+<!-- EMAIL GATE MODAL -->
+<div class="modal-backdrop" id="leadModal">
+  <div class="modal">
+    <h3>One last step</h3>
+    <p>Enter your email to unlock your results. We'll also send you a free guide on protecting your deliverability before your next launch.</p>
+    <input type="email" id="userEmail" placeholder="Your best email address" />
+    <button class="btn-primary" id="unlockBtn" onclick="unlockResults()">Unlock my results</button>
+    <div class="modal-note">No spam. Unsubscribe any time.</div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
 <script>
-const API_URL = "https://email-verifier-dkrb.onrender.com/verify";
+const API_URL  = "https://email-verifier-dkrb.onrender.com/verify";
 const LEAD_URL = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpTfbPN5APEuR0_LcLUnumZVdrOtoJ5OoogpeqV-bRIupH22/exec";
 
-let lastResults = [];
+let lastResults  = [];
 let pendingResult = [];
 let originalRows = [];
-let headers = [];
+let headers      = [];
 
-// ================= SINGLE =================
+// ── TAB SWITCHER ──
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && tab === 'single') || (i === 1 && tab === 'bulk'));
+  });
+  document.getElementById('panel-single').classList.toggle('active', tab === 'single');
+  document.getElementById('panel-bulk').classList.toggle('active', tab === 'bulk');
+  document.getElementById('results-area').style.display = 'none';
+}
+
+// ── SINGLE VERIFY ──
 async function verifyEmail() {
-  const email = document.getElementById("email").value;
-  const resultBox = document.getElementById("result");
+  const email  = document.getElementById('email').value.trim();
+  const status = document.getElementById('status-single');
+  const btn    = document.getElementById('btn-single');
 
-  if (!email) {
-    resultBox.innerText = "❌ Please enter an email";
-    return;
-  }
+  if (!email) { status.textContent = 'Please enter an email address.'; return; }
 
-  resultBox.innerHTML = '<div class="loader">⏳ Verifying email...</div>';
-
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email })
-  });
-
-  const data = await res.json();
-
-  pendingResult = [data];
-  document.getElementById("leadModal").style.display = "flex";
-}
-
-// ================= UNLOCK =================
-async function unlockResults() {
-  const userEmail = document.getElementById("userEmail").value;
-  const btn = document.getElementById("unlockBtn");
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(userEmail)) {
-    alert("Enter valid email");
-    return;
-  }
-
-  btn.innerText = "Checking...";
   btn.disabled = true;
-
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email: userEmail })
-  });
-
-  const data = await res.json();
-
-  if (!data.valid || data.status === "DANGEROUS") {
-    alert("Use a real email");
-    btn.innerText = "Unlock Results";
-    btn.disabled = false;
-    return;
-  }
-
-  await fetch(LEAD_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      userEmail,
-      type: pendingResult.length > 1 ? "bulk" : "single",
-      checkedEmail: pendingResult.map(r => r.email).join(", ")
-    })
-  });
-
-  document.getElementById("leadModal").style.display = "none";
-  displayTable(pendingResult);
-
-  btn.innerText = "Unlock Results";
-  btn.disabled = false;
-}
-
-// ================= BULK =================
-async function verifyBulk() {
-  const file = document.getElementById("file").files[0];
-  const resultBox = document.getElementById("result");
-
-  if (!file) {
-    resultBox.innerText = "❌ Please select a file";
-    return;
-  }
-
-  resultBox.innerHTML = '<div class="loader">⏳ Processing bulk emails...</div>';
+  btn.textContent = 'Checking…';
+  status.textContent = '';
 
   try {
-    let emails = [];
+    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) });
+    const data = await res.json();
+    pendingResult = [data];
+    document.getElementById('leadModal').classList.add('open');
+  } catch(e) {
+    status.textContent = 'Something went wrong. Please try again.';
+  }
 
-    const data = await file.arrayBuffer();
+  btn.disabled = false;
+  btn.textContent = 'Check this email';
+}
+
+// ── BULK VERIFY ──
+async function verifyBulk() {
+  const file   = document.getElementById('file').files[0];
+  const status = document.getElementById('status-bulk');
+  const btn    = document.getElementById('btn-bulk');
+
+  if (!file) { status.textContent = 'Please select a file first.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  status.textContent = 'Reading your file…';
+
+  try {
+    const data     = await file.arrayBuffer();
     const workbook = XLSX.read(data);
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const json = XLSX.utils.sheet_to_json(sheet);
+    const sheet    = workbook.Sheets[workbook.SheetNames[0]];
+    const json     = XLSX.utils.sheet_to_json(sheet);
 
     originalRows = json;
-    headers = Object.keys(json[0] || {});
+    headers      = Object.keys(json[0] || {});
 
-    emails = json.map(row => {
-      let value =
-        row.Email ||
-        row.email ||
-        Object.values(row).find(v =>
-          typeof v === "string" && v.includes("@")
-        );
+    const emails = json.map(row => ({
+      email: row.Email || row.email || Object.values(row).find(v => typeof v === 'string' && v.includes('@')),
+      row
+    })).filter(e => e.email);
 
-      return { email: value, row: row };
-    }).filter(e => e.email);
+    if (!emails.length) { status.textContent = 'No email addresses found in your file.'; btn.disabled = false; btn.textContent = 'Clean my list'; return; }
 
-    let results = [];
+    status.textContent = `Checking ${emails.length} emails…`;
+    const results = [];
 
-    for (let item of emails) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email: item.email })
-      });
-
+    for (let i = 0; i < emails.length; i++) {
+      const item = emails[i];
+      status.textContent = `Checking ${i + 1} of ${emails.length}…`;
+      const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: item.email }) });
       const data = await res.json();
-
-      results.push({
-        ...data,
-        row: item.row
-      });
-
+      results.push({ ...data, row: item.row });
       await new Promise(r => setTimeout(r, 200));
     }
 
     pendingResult = results;
-    document.getElementById("leadModal").style.display = "flex";
+    status.textContent = '';
+    document.getElementById('leadModal').classList.add('open');
 
-  } catch (error) {
-    resultBox.innerText = "❌ Failed to process file";
+  } catch(err) {
+    status.textContent = 'Failed to process file. Please check the format and try again.';
   }
+
+  btn.disabled = false;
+  btn.textContent = 'Clean my list';
 }
 
-// ================= TABLE =================
+// ── UNLOCK RESULTS ──
+async function unlockResults() {
+  const userEmail = document.getElementById('userEmail').value.trim();
+  const btn       = document.getElementById('unlockBtn');
+  const emailRx   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRx.test(userEmail)) { alert('Please enter a valid email address.'); return; }
+
+  btn.disabled     = true;
+  btn.textContent  = 'Verifying…';
+
+  try {
+    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: userEmail }) });
+    const data = await res.json();
+
+    if (!data.valid || data.status === 'DANGEROUS') {
+      alert('Please use a real, active email address to unlock your results.');
+      btn.disabled    = false;
+      btn.textContent = 'Unlock my results';
+      return;
+    }
+
+    await fetch(LEAD_URL, {
+      method: 'POST',
+      body: JSON.stringify({ userEmail, type: pendingResult.length > 1 ? 'bulk' : 'single', checkedEmail: pendingResult.map(r => r.email).join(', ') })
+    });
+
+    document.getElementById('leadModal').classList.remove('open');
+    displayTable(pendingResult);
+
+  } catch(e) {
+    alert('Something went wrong. Please try again.');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = 'Unlock my results';
+}
+
+// ── DISPLAY TABLE ──
 function displayTable(results) {
   lastResults = results;
 
-  const resultBox = document.getElementById("result");
+  const riskyCount = results.filter(r => r.status === 'RISKY' || r.status === 'DANGEROUS').length;
+  const total      = results.length;
 
-  let table = `
-    <table>
-      <tr>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Score</th>
-      </tr>
-  `;
+  document.getElementById('results-count').textContent = `${total} email${total !== 1 ? 's' : ''} checked`;
 
+  let rows = '';
   results.forEach(r => {
-    let badgeClass = "";
-
-    if (r.status === "SAFE") badgeClass = "badge safe";
-    if (r.status === "RISKY") badgeClass = "badge risky";
-    if (r.status === "DANGEROUS") badgeClass = "badge danger";
-
-    table += `
-      <tr>
-        <td>${r.email}</td>
-        <td><span class="${badgeClass}">${r.status}</span></td>
-        <td>${r.score}</td>
-      </tr>
-    `;
+    const cls = r.status === 'SAFE' ? 'safe' : r.status === 'RISKY' ? 'risky' : 'danger';
+    rows += `<tr>
+      <td style="width:55%">${r.email}</td>
+      <td style="width:25%"><span class="badge ${cls}">${r.status}</span></td>
+      <td style="width:20%">${r.score}</td>
+    </tr>`;
   });
 
-  table += "</table>";
+  document.getElementById('result').innerHTML = `
+    <table>
+      <thead><tr><th>Email</th><th>Status</th><th>Score</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 
-  resultBox.innerHTML = table;
+  document.getElementById('results-area').style.display = 'block';
+
+  // Show upgrade CTA if there are risky/dangerous emails
+  if (riskyCount > 0) {
+    document.getElementById('risky-count').textContent = `${riskyCount} email${riskyCount !== 1 ? 's' : ''}`;
+    document.getElementById('upgrade-box').classList.add('visible');
+  }
 }
 
-// ================= DOWNLOAD =================
+// ── DOWNLOADS ──
 function downloadCSV() {
   if (!lastResults.length) return;
-
-  let csv = "Email,Status,Score\n";
-
-  lastResults.forEach(r => {
-    csv += `${r.email},${r.status},${r.score}\n`;
-  });
-
-  const blob = new Blob([csv]);
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "verified_emails.csv";
-  a.click();
+  let csv = 'Email,Status,Score\n';
+  lastResults.forEach(r => { csv += `${r.email},${r.status},${r.score}\n`; });
+  triggerDownload(csv, 'verified_emails.csv');
 }
 
-// ================= SAFE DOWNLOAD =================
 function downloadSafeCSV() {
   if (!lastResults.length) return;
+  const safeRows = lastResults.filter(r => r.status === 'SAFE').map(r => r.row);
+  if (!safeRows.length) { alert('No SAFE emails found in your results.'); return; }
+  let csv = headers.join(',') + '\n';
+  safeRows.forEach(row => { csv += headers.map(h => `"${row[h] || ''}"`).join(',') + '\n'; });
+  triggerDownload(csv, 'safe_cleaned_list.csv');
+}
 
-  const safeRows = lastResults
-    .filter(r => r.status === "SAFE")
-    .map(r => r.row);
-
-  if (!safeRows.length) {
-    alert("No SAFE emails to download");
-    return;
-  }
-
-  let csv = headers.join(",") + "\n";
-
-  safeRows.forEach(row => {
-    csv += headers.map(h => `"${row[h] || ""}"`).join(",") + "\n";
-  });
-
-  const blob = new Blob([csv]);
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "safe_cleaned_data.csv";
+function triggerDownload(content, filename) {
+  const a   = document.createElement('a');
+  a.href    = URL.createObjectURL(new Blob([content]));
+  a.download = filename;
   a.click();
 }
 </script>
-
 </body>
 </html>
