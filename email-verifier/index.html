@@ -14,7 +14,6 @@
       min-height: 100vh;
     }
 
-    /* ── TOP NAV ── */
     .nav {
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
@@ -37,7 +36,6 @@
     }
     .nav-link:hover { color: #2563eb; }
 
-    /* ── HERO ── */
     .hero {
       text-align: center;
       padding: 56px 24px 40px;
@@ -75,9 +73,7 @@
       gap: 32px;
       flex-wrap: wrap;
     }
-    .hero-stat {
-      text-align: center;
-    }
+    .hero-stat { text-align: center; }
     .hero-stat strong {
       display: block;
       font-size: 22px;
@@ -89,7 +85,6 @@
       color: #64748b;
     }
 
-    /* ── MAIN CARD ── */
     .card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -99,7 +94,6 @@
       margin: 0 auto 32px;
     }
 
-    /* ── TABS ── */
     .tabs {
       display: flex;
       background: #f1f5f9;
@@ -126,11 +120,9 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* ── PANELS ── */
     .panel { display: none; }
     .panel.active { display: block; }
 
-    /* ── FREE LIMIT BADGE ── */
     .limit-notice {
       display: flex;
       align-items: center;
@@ -151,7 +143,13 @@
     }
     .limit-notice a:hover { text-decoration: underline; }
 
-    /* ── INPUTS ── */
+    .usage-counter {
+      font-size: 13px;
+      margin-bottom: 12px;
+      padding: 8px 0;
+      min-height: 28px;
+    }
+
     .field-label {
       font-size: 13px;
       font-weight: 500;
@@ -178,7 +176,6 @@
       background: #fff;
     }
 
-    /* ── BUTTONS ── */
     .btn-primary {
       width: 100%;
       padding: 13px;
@@ -212,7 +209,6 @@
     }
     .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
 
-    /* ── STATUS ── */
     .status {
       font-size: 13px;
       color: #64748b;
@@ -221,7 +217,6 @@
       min-height: 24px;
     }
 
-    /* ── RESULTS ── */
     .results-header {
       display: flex;
       align-items: center;
@@ -279,7 +274,6 @@
     .badge.risky   { background: #fef9c3; color: #854d0e; }
     .badge.danger  { background: #fee2e2; color: #991b1b; }
 
-    /* ── DOWNLOAD BUTTONS ── */
     .download-row {
       display: grid;
       grid-template-columns: minmax(0,1fr) minmax(0,1fr);
@@ -287,10 +281,9 @@
       margin-bottom: 16px;
     }
 
-    /* ── UPGRADE CTA ── */
     .upgrade-box {
       display: none;
-      background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+      background: #f0f9ff;
       border: 1px solid #bfdbfe;
       border-radius: 12px;
       padding: 20px;
@@ -329,7 +322,6 @@
       margin-top: 8px;
     }
 
-    /* ── MODAL ── */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -375,7 +367,6 @@
       margin-top: 8px;
     }
 
-    /* ── TRUST FOOTER ── */
     .trust-bar {
       text-align: center;
       padding: 16px 24px 40px;
@@ -391,7 +382,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <a href="https://www.scaleupsalesfunnels.com" class="nav-brand" target="_blank">
     ScaleUp<span>Funnels</span>
@@ -401,7 +391,6 @@
   </a>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-badge">Free Email List Cleaner for Coaches</div>
   <h1>Is your email list<br><span>killing your launches?</span></h1>
@@ -422,36 +411,33 @@
   </div>
 </div>
 
-<!-- MAIN CARD -->
 <div class="card">
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('single')">Single email</button>
     <button class="tab" onclick="switchTab('bulk')">Bulk upload</button>
   </div>
 
-  <!-- SINGLE PANEL -->
   <div class="panel active" id="panel-single">
     <label class="field-label">Enter an email address</label>
     <input type="email" id="email" placeholder="e.g. coach@example.com" />
+    <div id="usage-counter-single" class="usage-counter"></div>
     <button class="btn-primary" id="btn-single" onclick="verifyEmail()">Check this email</button>
     <div class="status" id="status-single"></div>
   </div>
 
-  <!-- BULK PANEL -->
   <div class="panel" id="panel-bulk">
     <div class="limit-notice">
       <span>Free plan: up to <strong>100 emails</strong></span>
       <a href="https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000" target="_blank">Need 5,000? Get Pro — $27 →</a>
     </div>
+    <div id="usage-counter" class="usage-counter"></div>
     <label class="field-label">Upload your list (.xlsx or .csv)</label>
     <input type="file" id="file" accept=".xlsx,.csv,.xls" />
     <button class="btn-primary" id="btn-bulk" onclick="verifyBulk()">Clean my list</button>
     <div class="status" id="status-bulk"></div>
   </div>
 
-  <!-- RESULTS AREA (hidden until results load) -->
   <div id="results-area" style="display:none; margin-top:24px; padding-top:20px; border-top:1px solid #f1f5f9;">
     <div class="results-header">
       <span class="results-title">Your results</span>
@@ -467,7 +453,6 @@
       <button class="btn-secondary" onclick="downloadSafeCSV()">Download safe only</button>
     </div>
 
-    <!-- UPGRADE CTA — appears after results -->
     <div class="upgrade-box" id="upgrade-box">
       <h3>Your list has risky addresses</h3>
       <p>
@@ -483,13 +468,11 @@
 
 </div>
 
-<!-- TRUST FOOTER -->
 <div class="trust-bar">
   Built by <a href="https://www.scaleupsalesfunnels.com" target="_blank">ScaleUp Sales Funnels</a>
   · Helping coaches build funnels that actually convert
 </div>
 
-<!-- EMAIL GATE MODAL -->
 <div class="modal-backdrop" id="leadModal">
   <div class="modal">
     <h3>One last step</h3>
@@ -502,50 +485,75 @@
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
-const API_URL  = "https://email-verifier-dkrb.onrender.com/verify";
-const LEAD_URL = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpTfbPN5APEuR0_LcLUnumZVdrOtoJ5OoogpeqV-bRIupH22/exec";
+const API_URL    = "https://email-verifier-dkrb.onrender.com/verify";
+const LEAD_URL   = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOdpTfbPN5APEuR0_LcLUnumZVdrOtoJ5OoogpeqV-bRIupH22/exec";
+const GUMROAD    = "https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000";
+const FREE_LIMIT = 100;
 
-let lastResults  = [];
+let lastResults   = [];
 let pendingResult = [];
-let originalRows = [];
-let headers      = [];
+let originalRows  = [];
+let headers       = [];
 
-// ── TAB SWITCHER ──
+function getUsage() {
+  return parseInt(localStorage.getItem('lr_usage') || '0');
+}
+function addUsage(n) {
+  localStorage.setItem('lr_usage', getUsage() + n);
+  renderCounter();
+}
+function renderCounter() {
+  const used      = getUsage();
+  const remaining = Math.max(0, FREE_LIMIT - used);
+  const bulk      = document.getElementById('usage-counter');
+  const single    = document.getElementById('usage-counter-single');
+  const limitHit  = remaining === 0;
+
+  const limitHTML = `<span style="color:#dc2626;font-weight:600">You've used all 100 free checks.</span> <a href="${GUMROAD}" target="_blank" style="color:#2563eb;font-weight:600;text-decoration:none">Get Pro for $27 →</a>`;
+  const freeHTML  = `<span style="color:#475569">${remaining} of ${FREE_LIMIT} free checks remaining</span>`;
+
+  if (bulk)   bulk.innerHTML   = limitHit ? limitHTML : freeHTML;
+  if (single) single.innerHTML = limitHit ? limitHTML : freeHTML;
+
+  document.getElementById('btn-single').disabled = limitHit;
+  document.getElementById('btn-bulk').disabled   = limitHit;
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', (i === 0 && tab === 'single') || (i === 1 && tab === 'bulk'));
   });
   document.getElementById('panel-single').classList.toggle('active', tab === 'single');
-  document.getElementById('panel-bulk').classList.toggle('active', tab === 'bulk');
+  document.getElementById('panel-bulk').classList.toggle('active',   tab === 'bulk');
   document.getElementById('results-area').style.display = 'none';
 }
 
-// ── SINGLE VERIFY ──
 async function verifyEmail() {
   const email  = document.getElementById('email').value.trim();
   const status = document.getElementById('status-single');
   const btn    = document.getElementById('btn-single');
 
   if (!email) { status.textContent = 'Please enter an email address.'; return; }
+  if (getUsage() >= FREE_LIMIT) { status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.'; return; }
 
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Checking…';
   status.textContent = '';
 
   try {
     const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) });
     const data = await res.json();
+    addUsage(1);
     pendingResult = [data];
     document.getElementById('leadModal').classList.add('open');
   } catch(e) {
     status.textContent = 'Something went wrong. Please try again.';
   }
 
-  btn.disabled = false;
+  btn.disabled    = false;
   btn.textContent = 'Check this email';
 }
 
-// ── BULK VERIFY ──
 async function verifyBulk() {
   const file   = document.getElementById('file').files[0];
   const status = document.getElementById('status-bulk');
@@ -553,7 +561,7 @@ async function verifyBulk() {
 
   if (!file) { status.textContent = 'Please select a file first.'; return; }
 
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Processing…';
   status.textContent = 'Reading your file…';
 
@@ -571,20 +579,33 @@ async function verifyBulk() {
       row
     })).filter(e => e.email);
 
-    if (!emails.length) { status.textContent = 'No email addresses found in your file.'; btn.disabled = false; btn.textContent = 'Clean my list'; return; }
+    if (!emails.length) {
+      status.textContent = 'No email addresses found in your file.';
+      btn.disabled = false; btn.textContent = 'Clean my list'; return;
+    }
 
-    status.textContent = `Checking ${emails.length} emails…`;
+    const remaining = FREE_LIMIT - getUsage();
+    if (remaining <= 0) {
+      status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.';
+      btn.disabled = false; btn.textContent = 'Clean my list'; return;
+    }
+
+    const capped = emails.slice(0, remaining);
+    if (capped.length < emails.length) {
+      status.textContent = `Free plan: checking first ${capped.length} of ${emails.length} emails. Upgrade for the full list.`;
+    }
+
     const results = [];
-
-    for (let i = 0; i < emails.length; i++) {
-      const item = emails[i];
-      status.textContent = `Checking ${i + 1} of ${emails.length}…`;
+    for (let i = 0; i < capped.length; i++) {
+      const item = capped[i];
+      status.textContent = `Checking ${i + 1} of ${capped.length}…`;
       const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: item.email }) });
       const data = await res.json();
       results.push({ ...data, row: item.row });
       await new Promise(r => setTimeout(r, 200));
     }
 
+    addUsage(capped.length);
     pendingResult = results;
     status.textContent = '';
     document.getElementById('leadModal').classList.add('open');
@@ -593,11 +614,10 @@ async function verifyBulk() {
     status.textContent = 'Failed to process file. Please check the format and try again.';
   }
 
-  btn.disabled = false;
+  btn.disabled    = false;
   btn.textContent = 'Clean my list';
 }
 
-// ── UNLOCK RESULTS ──
 async function unlockResults() {
   const userEmail = document.getElementById('userEmail').value.trim();
   const btn       = document.getElementById('unlockBtn');
@@ -605,8 +625,8 @@ async function unlockResults() {
 
   if (!emailRx.test(userEmail)) { alert('Please enter a valid email address.'); return; }
 
-  btn.disabled     = true;
-  btn.textContent  = 'Verifying…';
+  btn.disabled    = true;
+  btn.textContent = 'Verifying…';
 
   try {
     const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: userEmail }) });
@@ -621,7 +641,11 @@ async function unlockResults() {
 
     await fetch(LEAD_URL, {
       method: 'POST',
-      body: JSON.stringify({ userEmail, type: pendingResult.length > 1 ? 'bulk' : 'single', checkedEmail: pendingResult.map(r => r.email).join(', ') })
+      body: JSON.stringify({
+        userEmail,
+        type: pendingResult.length > 1 ? 'bulk' : 'single',
+        checkedEmail: pendingResult.map(r => r.email).join(', ')
+      })
     });
 
     document.getElementById('leadModal').classList.remove('open');
@@ -635,7 +659,6 @@ async function unlockResults() {
   btn.textContent = 'Unlock my results';
 }
 
-// ── DISPLAY TABLE ──
 function displayTable(results) {
   lastResults = results;
 
@@ -662,14 +685,12 @@ function displayTable(results) {
 
   document.getElementById('results-area').style.display = 'block';
 
-  // Show upgrade CTA if there are risky/dangerous emails
   if (riskyCount > 0) {
     document.getElementById('risky-count').textContent = `${riskyCount} email${riskyCount !== 1 ? 's' : ''}`;
     document.getElementById('upgrade-box').classList.add('visible');
   }
 }
 
-// ── DOWNLOADS ──
 function downloadCSV() {
   if (!lastResults.length) return;
   let csv = 'Email,Status,Score\n';
@@ -687,11 +708,13 @@ function downloadSafeCSV() {
 }
 
 function triggerDownload(content, filename) {
-  const a   = document.createElement('a');
-  a.href    = URL.createObjectURL(new Blob([content]));
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob([content]));
   a.download = filename;
   a.click();
 }
+
+renderCounter();
 </script>
 </body>
 </html>
