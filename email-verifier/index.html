@@ -285,11 +285,12 @@ async function checkUsageRemote(userEmail) {
 function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
   try {
     fetch(LEAD_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: {'Content-Type': 'application/json'},
-      body:    JSON.stringify({
-        action: 'recordUsage',
+      method: "POST",
+      mode: "no-cors", // ✅ REQUIRED
+      headers: {
+        "Content-Type": "application/json" // 🔥 FIX
+      },
+      body: JSON.stringify({
         userEmail,
         type,
         checkedEmail,
