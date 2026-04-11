@@ -284,22 +284,17 @@ async function checkUsageRemote(userEmail) {
 // ── RECORD USAGE via no-cors POST (fire and forget) ──
 function recordUsageRemote(userEmail, type, checkedEmail, usageCount) {
   try {
-    fetch(LEAD_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: JSON.stringify({
-        userEmail,
-        type,
-        checkedEmail,
-        usageCount
-      })
-    });
+    const url =
+      LEAD_URL +
+      "?action=record" +
+      "&userEmail=" + encodeURIComponent(userEmail) +
+      "&type=" + encodeURIComponent(type) +
+      "&checkedEmail=" + encodeURIComponent(checkedEmail) +
+      "&usageCount=" + encodeURIComponent(usageCount);
+
+    fetch(url); // simple GET request
   } catch (e) {}
 }
-
 async function handleGate() {
   const userEmail = document.getElementById('userEmail').value.trim();
   const btn       = document.getElementById('unlockBtn');
