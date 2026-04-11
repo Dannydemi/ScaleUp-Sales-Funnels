@@ -79,11 +79,7 @@
       align-items: center;
       gap: 14px;
     }
-    .proof-icon {
-      width: 44px;
-      height: 44px;
-      flex-shrink: 0;
-    }
+    .proof-icon { width: 44px; height: 44px; flex-shrink: 0; }
     .proof-text { font-size: 13px; color: #374151; line-height: 1.5; }
     .proof-text strong { color: #0f172a; font-weight: 600; }
     .proof-text span { color: #64748b; font-size: 12px; display: block; margin-top: 2px; }
@@ -339,7 +335,7 @@
       background: #fff;
       border-radius: 14px;
       padding: 28px 24px;
-      width: 320px;
+      width: 340px;
       text-align: center;
     }
     .modal h3 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
@@ -352,9 +348,16 @@
       font-size: 14px;
       margin-bottom: 10px;
       outline: none;
+      color: #0f172a;
     }
     .modal input:focus { border-color: #2563eb; }
     .modal-note { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+    .modal-error {
+      font-size: 12px;
+      color: #dc2626;
+      margin-top: 6px;
+      min-height: 18px;
+    }
 
     .trust-bar {
       text-align: center;
@@ -382,22 +385,12 @@
   <h1>Is your email list<br><span>killing your launches?</span></h1>
   <p>The average coach's list has 20–30% invalid addresses. Every bad email hurts your deliverability score — and tanks open rates right before a launch.</p>
   <div class="hero-stats">
-    <div class="hero-stat">
-      <strong>23%</strong>
-      <span>avg. invalid rate</span>
-    </div>
-    <div class="hero-stat">
-      <strong>$0</strong>
-      <span>to check 100 emails</span>
-    </div>
-    <div class="hero-stat">
-      <strong>30 sec</strong>
-      <span>to get results</span>
-    </div>
+    <div class="hero-stat"><strong>23%</strong><span>avg. invalid rate</span></div>
+    <div class="hero-stat"><strong>$0</strong><span>to check 100 emails</span></div>
+    <div class="hero-stat"><strong>30 sec</strong><span>to get results</span></div>
   </div>
 </div>
 
-<!-- SOCIAL PROOF BAR -->
 <div class="proof-bar">
   <svg class="proof-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect width="44" height="44" rx="10" fill="#f0fdf4"/>
@@ -415,7 +408,6 @@
 </div>
 
 <div class="card">
-
   <div class="tabs">
     <button class="tab active" onclick="switchTab('single')">Single email</button>
     <button class="tab" onclick="switchTab('bulk')">Bulk upload</button>
@@ -425,7 +417,7 @@
     <label class="field-label">Enter an email address</label>
     <input type="email" id="email" placeholder="e.g. coach@example.com" />
     <div id="usage-counter-single" class="usage-counter"></div>
-    <button class="btn-primary" id="btn-single" onclick="verifyEmail()">Check this email</button>
+    <button class="btn-primary" id="btn-single" onclick="startSingle()">Check this email</button>
     <div class="status" id="status-single"></div>
   </div>
 
@@ -437,7 +429,7 @@
     <div id="usage-counter" class="usage-counter"></div>
     <label class="field-label">Upload your list (.xlsx or .csv)</label>
     <input type="file" id="file" accept=".xlsx,.csv,.xls" />
-    <button class="btn-primary" id="btn-bulk" onclick="verifyBulk()">Clean my list</button>
+    <button class="btn-primary" id="btn-bulk" onclick="startBulk()">Clean my list</button>
     <div class="status" id="status-bulk"></div>
   </div>
 
@@ -465,7 +457,6 @@
       <div class="upgrade-sub">Up to 5,000 emails · Results within 24 hours · One-time payment</div>
     </div>
   </div>
-
 </div>
 
 <div class="how">
@@ -496,12 +487,14 @@
   Questions? <a href="mailto:contact@scaleupsalesfunnels.com">contact@scaleupsalesfunnels.com</a>
 </div>
 
+<!-- EMAIL GATE MODAL — fires BEFORE verification -->
 <div class="modal-backdrop" id="leadModal">
   <div class="modal">
-    <h3>One last step</h3>
-    <p>Enter your email to unlock your results. We'll also send you a free guide on protecting your deliverability before your next launch.</p>
+    <h3>Enter your email to continue</h3>
+    <p>We use this to track your free usage across sessions. Up to 100 checks free — no card needed.</p>
     <input type="email" id="userEmail" placeholder="Your best email address" />
-    <button class="btn-primary" id="unlockBtn" onclick="unlockResults()">Unlock my results</button>
+    <div class="modal-error" id="modal-error"></div>
+    <button class="btn-primary" id="unlockBtn" onclick="handleGate()">Continue →</button>
     <div class="modal-note">No spam. Unsubscribe any time.</div>
   </div>
 </div>
@@ -513,35 +506,29 @@ const LEAD_URL   = "https://script.google.com/macros/s/AKfycbyFZQzzFBUdAWiMjHlOd
 const GUMROAD    = "https://scaleupsalesfunnels.gumroad.com/l/launchready-pro-5000";
 const FREE_LIMIT = 100;
 
-let lastResults   = [];
-let pendingResult = [];
-let originalRows  = [];
-let headers       = [];
+let lastResults    = [];
+let originalRows   = [];
+let headers        = [];
+let pendingEmails  = [];
+let pendingType    = "";
+let sessionEmail   = localStorage.getItem('lr_email') || "";
+let sessionUsage   = parseInt(localStorage.getItem('lr_usage') || '0');
 
-function getUsage() {
-  return parseInt(localStorage.getItem('lr_usage') || '0');
-}
-function addUsage(n) {
-  localStorage.setItem('lr_usage', getUsage() + n);
-  renderCounter();
-}
+// ── COUNTER DISPLAY ──
 function renderCounter() {
-  const used      = getUsage();
-  const remaining = Math.max(0, FREE_LIMIT - used);
-  const bulk      = document.getElementById('usage-counter');
-  const single    = document.getElementById('usage-counter-single');
+  const remaining = Math.max(0, FREE_LIMIT - sessionUsage);
   const limitHit  = remaining === 0;
-
   const limitHTML = `<span style="color:#dc2626;font-weight:600">You've used all 100 free checks.</span> <a href="${GUMROAD}" target="_blank" style="color:#2563eb;font-weight:600;text-decoration:none">Get Pro for $27 →</a>`;
   const freeHTML  = `<span style="color:#475569">${remaining} of ${FREE_LIMIT} free checks remaining</span>`;
-
+  const bulk   = document.getElementById('usage-counter');
+  const single = document.getElementById('usage-counter-single');
   if (bulk)   bulk.innerHTML   = limitHit ? limitHTML : freeHTML;
   if (single) single.innerHTML = limitHit ? limitHTML : freeHTML;
-
   document.getElementById('btn-single').disabled = limitHit;
   document.getElementById('btn-bulk').disabled   = limitHit;
 }
 
+// ── TAB SWITCHER ──
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', (i === 0 && tab === 'single') || (i === 1 && tab === 'bulk'));
@@ -551,140 +538,165 @@ function switchTab(tab) {
   document.getElementById('results-area').style.display = 'none';
 }
 
-async function verifyEmail() {
-  const email  = document.getElementById('email').value.trim();
-  const status = document.getElementById('status-single');
-  const btn    = document.getElementById('btn-single');
+// ── GATE HELPERS ──
+function openGate(type) {
+  pendingType = type;
+  document.getElementById('modal-error').textContent = '';
+  if (sessionEmail) {
+    document.getElementById('userEmail').value = sessionEmail;
+  }
+  document.getElementById('leadModal').classList.add('open');
+}
 
-  if (!email) { status.textContent = 'Please enter an email address.'; return; }
-  if (getUsage() >= FREE_LIMIT) { status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.'; return; }
+function closeGate() {
+  document.getElementById('leadModal').classList.remove('open');
+}
+
+// ── ENTRY POINTS ──
+function startSingle() {
+  const email = document.getElementById('email').value.trim();
+  if (!email) { document.getElementById('status-single').textContent = 'Please enter an email address.'; return; }
+  if (sessionUsage >= FREE_LIMIT) { document.getElementById('status-single').textContent = 'Free limit reached. Upgrade to Pro to check more emails.'; return; }
+  pendingEmails = [{ email, row: { Email: email } }];
+  openGate('single');
+}
+
+function startBulk() {
+  const file   = document.getElementById('file').files[0];
+  const status = document.getElementById('status-bulk');
+  if (!file) { status.textContent = 'Please select a file first.'; return; }
+  if (sessionUsage >= FREE_LIMIT) { status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.'; return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const workbook = XLSX.read(e.target.result);
+      const sheet    = workbook.Sheets[workbook.SheetNames[0]];
+      const json     = XLSX.utils.sheet_to_json(sheet);
+      originalRows   = json;
+      headers        = Object.keys(json[0] || {});
+      const emails   = json.map(row => ({
+        email: row.Email || row.email || Object.values(row).find(v => typeof v === 'string' && v.includes('@')),
+        row
+      })).filter(e => e.email);
+      if (!emails.length) { status.textContent = 'No email addresses found in your file.'; return; }
+      pendingEmails = emails;
+      openGate('bulk');
+    } catch(err) {
+      status.textContent = 'Failed to read file. Please check the format and try again.';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ── GATE HANDLER — checks usage server-side before proceeding ──
+async function handleGate() {
+  const userEmail = document.getElementById('userEmail').value.trim();
+  const btn       = document.getElementById('unlockBtn');
+  const errEl     = document.getElementById('modal-error');
+  const emailRx   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  errEl.textContent = '';
+  if (!emailRx.test(userEmail)) { errEl.textContent = 'Please enter a valid email address.'; return; }
 
   btn.disabled    = true;
   btn.textContent = 'Checking…';
-  status.textContent = '';
 
   try {
-    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) });
-    const data = await res.json();
-    addUsage(1);
-    pendingResult = [data];
-    document.getElementById('leadModal').classList.add('open');
-  } catch(e) {
-    status.textContent = 'Something went wrong. Please try again.';
-  }
-
-  btn.disabled    = false;
-  btn.textContent = 'Check this email';
-}
-
-async function verifyBulk() {
-  const file   = document.getElementById('file').files[0];
-  const status = document.getElementById('status-bulk');
-  const btn    = document.getElementById('btn-bulk');
-
-  if (!file) { status.textContent = 'Please select a file first.'; return; }
-
-  btn.disabled    = true;
-  btn.textContent = 'Processing…';
-  status.textContent = 'Reading your file…';
-
-  try {
-    const data     = await file.arrayBuffer();
-    const workbook = XLSX.read(data);
-    const sheet    = workbook.Sheets[workbook.SheetNames[0]];
-    const json     = XLSX.utils.sheet_to_json(sheet);
-
-    originalRows = json;
-    headers      = Object.keys(json[0] || {});
-
-    const emails = json.map(row => ({
-      email: row.Email || row.email || Object.values(row).find(v => typeof v === 'string' && v.includes('@')),
-      row
-    })).filter(e => e.email);
-
-    if (!emails.length) {
-      status.textContent = 'No email addresses found in your file.';
-      btn.disabled = false; btn.textContent = 'Clean my list'; return;
+    // Step 1: validate email is real
+    const valRes  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: userEmail }) });
+    const valData = await valRes.json();
+    if (!valData.valid || valData.status === 'DANGEROUS') {
+      errEl.textContent = 'Please use a real, active email address to continue.';
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
     }
 
-    const remaining = FREE_LIMIT - getUsage();
-    if (remaining <= 0) {
-      status.textContent = 'Free limit reached. Upgrade to Pro to check more emails.';
-      btn.disabled = false; btn.textContent = 'Clean my list'; return;
+    // Step 2: check server-side usage for this email
+    const usageRes  = await fetch(LEAD_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action: 'checkUsage', userEmail }) });
+    const usageData = await usageRes.json();
+    const serverCount = parseInt(usageData.count || 0);
+
+    if (serverCount >= FREE_LIMIT) {
+      errEl.innerHTML = `You've used all 100 free checks with this email. <a href="${GUMROAD}" target="_blank" style="color:#2563eb;font-weight:600">Get Pro for $27 →</a>`;
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
     }
 
-    const capped = emails.slice(0, remaining);
-    if (capped.length < emails.length) {
-      status.textContent = `Free plan: checking first ${capped.length} of ${emails.length} emails. Upgrade for the full list.`;
-    }
+    // Step 3: update session
+    sessionEmail = userEmail;
+    sessionUsage = serverCount;
+    localStorage.setItem('lr_email', sessionEmail);
+    localStorage.setItem('lr_usage', sessionUsage);
 
-    const results = [];
-    for (let i = 0; i < capped.length; i++) {
-      const item = capped[i];
-      status.textContent = `Checking ${i + 1} of ${capped.length}…`;
-      const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: item.email }) });
-      const data = await res.json();
-      results.push({ ...data, row: item.row });
-      await new Promise(r => setTimeout(r, 200));
-    }
+    closeGate();
 
-    addUsage(capped.length);
-    pendingResult = results;
-    status.textContent = '';
-    document.getElementById('leadModal').classList.add('open');
+    // Step 4: run verification
+    if (pendingType === 'single') {
+      await runVerification(pendingEmails, 'single', userEmail);
+    } else {
+      await runVerification(pendingEmails, 'bulk', userEmail);
+    }
 
   } catch(err) {
-    status.textContent = 'Failed to process file. Please check the format and try again.';
+    errEl.textContent = 'Something went wrong. Please try again.';
   }
 
   btn.disabled    = false;
-  btn.textContent = 'Clean my list';
+  btn.textContent = 'Continue →';
 }
 
-async function unlockResults() {
-  const userEmail = document.getElementById('userEmail').value.trim();
-  const btn       = document.getElementById('unlockBtn');
-  const emailRx   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// ── CORE VERIFICATION ──
+async function runVerification(emails, type, userEmail) {
+  const status    = document.getElementById(type === 'single' ? 'status-single' : 'status-bulk');
+  const btn       = document.getElementById(type === 'single' ? 'btn-single' : 'btn-bulk');
+  const remaining = FREE_LIMIT - sessionUsage;
+  const capped    = emails.slice(0, remaining);
 
-  if (!emailRx.test(userEmail)) { alert('Please enter a valid email address.'); return; }
+  btn.disabled = true;
 
-  btn.disabled    = true;
-  btn.textContent = 'Verifying…';
+  if (type === 'bulk' && capped.length < emails.length) {
+    status.textContent = `Free plan: checking first ${capped.length} of ${emails.length} emails. Upgrade for the full list.`;
+  }
 
-  try {
-    const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: userEmail }) });
-    const data = await res.json();
-
-    if (!data.valid || data.status === 'DANGEROUS') {
-      alert('Please use a real, active email address to unlock your results.');
-      btn.disabled    = false;
-      btn.textContent = 'Unlock my results';
-      return;
+  const results = [];
+  for (let i = 0; i < capped.length; i++) {
+    status.textContent = `Checking ${i + 1} of ${capped.length}…`;
+    try {
+      const res  = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: capped[i].email }) });
+      const data = await res.json();
+      results.push({ ...data, row: capped[i].row });
+    } catch(e) {
+      results.push({ email: capped[i].email, status: 'ERROR', score: 0, row: capped[i].row });
     }
-
-    await fetch(LEAD_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        userEmail,
-        type: pendingResult.length > 1 ? 'bulk' : 'single',
-        checkedEmail: pendingResult.map(r => r.email).join(', ')
-      })
-    });
-
-    document.getElementById('leadModal').classList.remove('open');
-    displayTable(pendingResult);
-
-  } catch(e) {
-    alert('Something went wrong. Please try again.');
+    await new Promise(r => setTimeout(r, 200));
   }
 
-  btn.disabled    = false;
-  btn.textContent = 'Unlock my results';
+  // Step 5: record usage in sheet
+  const newCount = capped.length;
+  await fetch(LEAD_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action:       'recordUsage',
+      userEmail,
+      type,
+      checkedEmail: capped.map(e => e.email).join(', '),
+      usageCount:   newCount
+    })
+  });
+
+  // Update local session
+  sessionUsage += newCount;
+  localStorage.setItem('lr_usage', sessionUsage);
+  renderCounter();
+
+  status.textContent = '';
+  btn.disabled = false;
+  displayTable(results);
 }
 
+// ── DISPLAY TABLE ──
 function displayTable(results) {
   lastResults = results;
-
   const riskyCount = results.filter(r => r.status === 'RISKY' || r.status === 'DANGEROUS').length;
   const total      = results.length;
 
@@ -714,6 +726,7 @@ function displayTable(results) {
   }
 }
 
+// ── DOWNLOADS ──
 function downloadCSV() {
   if (!lastResults.length) return;
   let csv = 'Email,Status,Score\n';
